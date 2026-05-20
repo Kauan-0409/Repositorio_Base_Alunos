@@ -6,6 +6,8 @@ pg.click()
 
 pg.moveTo(200, 60, duration=0.5)
 
+pg.click()
+
 pg.write("youtube", interval=0.3)
 
 pg.press("enter")
