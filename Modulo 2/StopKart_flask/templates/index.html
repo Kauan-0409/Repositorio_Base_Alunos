@@ -1,0 +1,1690 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Stopkart</title>
+
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='logo.png') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        /* =========================================
+           FUNDO
+        ========================================= */
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-family: "Inter", sans-serif;
+
+            background: #101114;
+            color: #f2f2f2;
+
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+
+            position: fixed;
+
+            width: 700px;
+            height: 700px;
+
+            top: -250px;
+            left: -200px;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(80, 120, 255, 0.16),
+                    transparent 65%
+                );
+
+            filter: blur(20px);
+
+            animation:
+                moverLuz1 12s ease-in-out infinite alternate;
+
+            pointer-events: none;
+            z-index: -2;
+        }
+
+        body::after {
+            content: "";
+
+            position: fixed;
+
+            width: 650px;
+            height: 650px;
+
+            right: -220px;
+            bottom: -250px;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(180, 70, 255, 0.13),
+                    transparent 65%
+                );
+
+            filter: blur(25px);
+
+            animation:
+                moverLuz2 15s ease-in-out infinite alternate;
+
+            pointer-events: none;
+            z-index: -2;
+        }
+
+        @keyframes moverLuz1 {
+
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate(280px, 180px) scale(1.2);
+            }
+
+            100% {
+                transform: translate(100px, 400px) scale(0.9);
+            }
+
+        }
+
+        @keyframes moverLuz2 {
+
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate(-250px, -150px) scale(1.25);
+            }
+
+            100% {
+                transform: translate(-100px, -350px) scale(0.9);
+            }
+
+        }
+
+        /* =========================================
+           GRADE
+        ========================================= */
+
+        .background-grid {
+            position: fixed;
+            inset: 0;
+
+            background-image:
+                linear-gradient(
+                    rgba(255,255,255,0.025) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,0.025) 1px,
+                    transparent 1px
+                );
+
+            background-size: 45px 45px;
+
+            mask-image:
+                linear-gradient(
+                    to bottom,
+                    transparent,
+                    black 20%,
+                    black 80%,
+                    transparent
+                );
+
+            animation:
+                moverGrade 20s linear infinite;
+
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes moverGrade {
+
+            from {
+                background-position: 0 0;
+            }
+
+            to {
+                background-position: 45px 45px;
+            }
+
+        }
+
+        /* =========================================
+           CONTAINER
+        ========================================= */
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+
+            padding: 25px;
+
+            position: relative;
+            z-index: 1;
+        }
+
+        /* =========================================
+           TÍTULO
+        ========================================= */
+
+        .titulo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .titulo h1 {
+            font-size: 46px;
+
+            margin: 0;
+
+            font-weight: 800;
+
+            text-shadow:
+                0 0 25px rgba(255,255,255,0.08);
+        }
+
+        .titulo p {
+            color: #999;
+        }
+
+        /* =========================================
+           CARDS
+        ========================================= */
+
+        .cards {
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 20px;
+        }
+
+        .card {
+            background:
+                rgba(24, 25, 30, 0.88);
+
+            border:
+                1px solid rgba(255,255,255,0.08);
+
+            border-radius: 16px;
+
+            padding: 28px;
+
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+
+            box-shadow:
+                0 15px 50px rgba(0,0,0,0.25);
+
+            transition:
+                transform 0.25s ease,
+                border-color 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+
+            border-color:
+                rgba(255,255,255,0.13);
+
+            box-shadow:
+                0 20px 60px rgba(0,0,0,0.35);
+        }
+
+        /* =========================================
+           INPUTS
+        ========================================= */
+
+        input {
+            width: 100%;
+
+            padding: 13px;
+
+            margin-top: 8px;
+
+            border-radius: 9px;
+
+            border:
+                1px solid #303239;
+
+            background:
+                rgba(16,17,20,0.9);
+
+            color: white;
+
+            font-family: inherit;
+
+            outline: none;
+
+            transition:
+                border-color 0.2s,
+                box-shadow 0.2s;
+        }
+
+        input:focus {
+            border-color: #666;
+
+            box-shadow:
+                0 0 0 3px rgba(255,255,255,0.04);
+        }
+
+        /* =========================================
+           BOTÕES
+        ========================================= */
+
+        button {
+            width: 100%;
+
+            padding: 13px;
+
+            margin-top: 12px;
+
+            border: none;
+
+            border-radius: 9px;
+
+            background: #f2f2f2;
+
+            color: #111;
+
+            font-family: inherit;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition:
+                transform 0.15s,
+                box-shadow 0.2s,
+                background 0.2s;
+        }
+
+        button:hover {
+            background: white;
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 8px 25px rgba(255,255,255,0.08);
+        }
+
+        button:active {
+            transform:
+                translateY(0);
+        }
+
+        /* =========================================
+           CONFIGURAÇÕES
+        ========================================= */
+
+        .config {
+            margin-top: 20px;
+
+            padding-top: 20px;
+
+            border-top:
+                1px solid #292b31;
+        }
+
+        .config h3 {
+            margin-top: 0;
+        }
+
+        .config label {
+            display: block;
+
+            margin-top: 12px;
+
+            font-size: 14px;
+
+            color: #bbb;
+        }
+
+        /* =========================================
+           MODOS
+        ========================================= */
+
+        .modos {
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 8px;
+
+            margin-top: 10px;
+        }
+
+        .modo {
+            margin: 0;
+
+            padding: 12px;
+
+            background: #22242a;
+
+            border:
+                1px solid #303239;
+
+            border-radius: 9px;
+
+            cursor: pointer;
+
+            text-align: center;
+
+            font-weight: 700;
+
+            color: #aaa;
+
+            transition: 0.2s;
+        }
+
+        .modo:hover {
+            background: #2b2e35;
+
+            color: white;
+
+            transform:
+                translateY(-1px);
+        }
+
+        .modo input {
+            display: none;
+        }
+
+        .modo:has(input:checked) {
+            background: #30333a;
+
+            border-color: #777;
+
+            color: white;
+
+            box-shadow:
+                0 0 20px rgba(255,255,255,0.04);
+        }
+
+        /* =========================================
+           INTERVALO
+        ========================================= */
+
+        #config-intervalo {
+            margin-top: 18px;
+
+            padding: 14px;
+
+            background:
+                rgba(255,255,255,0.025);
+
+            border:
+                1px solid #303239;
+
+            border-radius: 10px;
+        }
+
+        #btn-intervalo {
+            margin-top: 0;
+
+            background: #22242a;
+
+            border:
+                1px solid #303239;
+
+            color: white;
+        }
+
+        #btn-intervalo:hover {
+            background: #30333a;
+        }
+
+        #btn-intervalo.desativado {
+            color: #aaa;
+        }
+
+        #info-intervalo {
+            margin-top: 8px;
+
+            color: #777;
+
+            font-size: 12px;
+
+            text-align: center;
+        }
+
+        #config-sobrevivente {
+            margin-top: 18px;
+
+            padding: 14px;
+
+            background: rgba(255,255,255,0.025);
+
+            border: 1px solid #303239;
+
+            border-radius: 10px;
+        }
+
+        #btn-sobrevivente {
+            margin-top: 0;
+
+            background: #22242a;
+
+            border: 1px solid #303239;
+
+            color: white;
+        }
+
+        #btn-sobrevivente:hover {
+            background: #30333a;
+        }
+
+        #btn-sobrevivente.desativado {
+            color: #aaa;
+        }
+
+        #info-sobrevivente {
+            margin-top: 8px;
+
+            color: #777;
+
+            font-size: 12px;
+
+            text-align: center;
+        }
+
+        /* =========================================
+           LETRAS
+        ========================================= */
+
+        .letras {
+            display: grid;
+
+            grid-template-columns:
+                repeat(13, 1fr);
+
+            gap: 5px;
+
+            margin-top: 10px;
+        }
+
+        .letras label {
+            margin: 0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 6px;
+
+            border-radius: 6px;
+
+            background: #22242a;
+
+            cursor: pointer;
+
+            font-size: 12px;
+
+            transition: 0.2s;
+        }
+
+        .letras label:hover {
+            background: #2d3037;
+
+            transform:
+                translateY(-1px);
+        }
+
+        .letras input {
+            width: auto;
+
+            margin:
+                0 3px 0 0;
+        }
+
+        /* =========================================
+           DESATIVADO
+        ========================================= */
+
+        input:disabled {
+            opacity: 0.4;
+
+            cursor: not-allowed;
+        }
+
+        .ajuda {
+            margin-top: 6px;
+
+            color: #777;
+
+            font-size: 12px;
+        }
+
+        .aviso-config {
+            margin-top: 10px;
+
+            padding: 10px 12px;
+
+            border: 1px solid rgba(255, 190, 70, 0.28);
+
+            border-radius: 9px;
+
+            background: rgba(255, 190, 70, 0.06);
+
+            color: #d6b36a;
+
+            font-size: 12px;
+
+            line-height: 1.45;
+        }
+
+        /* =========================================
+           MÚSICA
+        ========================================= */
+
+        .musica-bloco {
+            position: fixed;
+
+            right: 20px;
+            bottom: 20px;
+
+            width: 190px;
+
+            padding: 12px;
+
+            background:
+                rgba(24, 25, 30, 0.92);
+
+            border:
+                1px solid rgba(255,255,255,0.08);
+
+            border-radius: 14px;
+
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+
+            box-shadow:
+                0 15px 45px rgba(0,0,0,0.35);
+
+            z-index: 1000;
+        }
+
+        .musica-titulo {
+            font-size: 13px;
+
+            font-weight: 700;
+
+            color: #aaa;
+
+            margin-bottom: 8px;
+        }
+
+        .botao-musica {
+            width: 100%;
+
+            margin: 0;
+
+            padding: 8px 10px;
+
+            font-size: 13px;
+
+            border:
+                1px solid #303239;
+
+            border-radius: 9px;
+
+            background: #22242a;
+
+            color: #fff;
+
+            font-family: inherit;
+
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+        .botao-musica:hover {
+            background: #30333a;
+        }
+
+        /* =========================================
+        BOTÃO TUTORIAL
+        ========================================= */
+
+        .botao-tutorial {
+            display: block;
+            width: 100%;
+            max-width: 900px;
+            margin: 20px auto 0;
+            padding: 14px;
+            border-radius: 10px;
+            background: #22242a;
+            border: 1px solid #303239;
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            font-family: inherit;
+            font-weight: 700;
+            transition:
+                transform 0.15s,
+                background 0.2s,
+                box-shadow 0.2s,
+                border-color 0.2s;
+        }
+
+        .botao-tutorial:hover {
+            background: #30333a;
+            border-color: #777;
+            transform: translateY(-2px);
+            box-shadow:
+                0 8px 25px rgba(255,255,255,0.08);
+        }
+
+        /* =========================================
+           ÍCONES SVG
+        ========================================= */
+
+        .icone-svg {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+            vertical-align: -5px;
+            margin-right: 7px;
+        }
+
+        .icone-titulo-svg {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+            vertical-align: -6px;
+            margin-right: 8px;
+        }
+
+        .logo-roda {
+            display: block;
+            width: 170px;
+            height: 170px;
+            object-fit: contain;
+            margin: 0 auto 8px;
+        }
+
+
+        /* =========================================
+           ASSINATURA
+        ========================================= */
+
+        .assinatura {
+            margin: 45px auto 25px;
+            padding-top: 22px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            text-align: center;
+            color: #777;
+        }
+
+        .assinatura-imagem {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .assinatura-img {
+            display: block;
+            width: min(320px, 70vw);
+            height: auto;
+            opacity: 0.82;
+        }
+
+        .assinatura-nome {
+            font-size: 19px;
+            color: #aaa;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+        }
+
+        .assinatura-meta {
+            margin-top: 6px;
+            font-size: 11px;
+            color: #666;
+        }
+
+        /* =========================================
+           RESPONSIVO
+        ========================================= */
+
+        @media (max-width: 750px) {
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .letras {
+                grid-template-columns:
+                    repeat(6, 1fr);
+            }
+
+        }
+
+        @media (max-width: 500px) {
+
+            .titulo h1 {
+                font-size: 36px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            .musica-bloco {
+                right: 15px;
+
+                bottom: 15px;
+
+                width: 175px;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="background-grid"></div>
+
+    <div class="container">
+
+        <div class="titulo">
+
+            <img
+                class="logo-roda"
+                src="{{ url_for('static', filename='RodaStopkart.png') }}"
+                alt="Stopkart"
+            >
+
+            <h1>Stopkart</h1>
+
+            <p>
+                Pense rápido. Escolha o carro certo. Não repita.
+            </p>
+
+        </div>
+
+        <div class="cards">
+
+            <!-- =========================
+                 CRIAR SALA
+            ========================= -->
+
+            <div class="card">
+
+                <h2><img class="icone-titulo-svg" src="{{ url_for('static', filename='icons/GameController_Icon.svg') }}" alt="">Criar sala</h2>
+
+                <p>
+                    Configure a partida do seu jeito
+                </p>
+
+                <form
+                    action="/criar"
+                    method="POST"
+                >
+
+                    <!-- NOME -->
+
+                    <input
+                        type="text"
+                        id="nome-criar"
+                        name="nome"
+                        placeholder="Seu nome"
+                        maxlength="20"
+                        pattern="[A-Za-z0-9_]+"
+                        title="Use apenas letras, números e _"
+                        required
+                    >
+
+                    <div class="config">
+
+                        <h3>
+                            <img class="icone-svg" src="{{ url_for('static', filename='icons/Settings_Icon.svg') }}" alt="">
+                            Configurações da sala
+                        </h3>
+
+                        <!-- =========================
+                             MODO
+                        ========================= -->
+
+                        <label>
+                            <img class="icone-svg" src="{{ url_for('static', filename='icons/GameController_Icon.svg') }}" alt="">
+                            Modo de jogo
+                        </label>
+
+                        <div class="modos">
+
+                            <label class="modo">
+
+                                <input
+                                    type="radio"
+                                    name="modo"
+                                    value="multi"
+                                    checked
+                                >
+
+                                <img class="icone-svg" src="{{ url_for('static', filename='icons/Users_Icon.svg') }}" alt="">
+                                Multiplayer
+
+                            </label>
+
+                            <label class="modo">
+
+                                <input
+                                    type="radio"
+                                    name="modo"
+                                    value="solo"
+                                >
+
+                                <img class="icone-svg" src="{{ url_for('static', filename='icons/User_Icon.svg') }}" alt="">
+                                Solo
+
+                            </label>
+
+                        </div>
+
+                        <!-- =========================
+                             INTERVALO
+                        ========================= -->
+
+                        <div id="config-intervalo">
+
+                            <input
+                                type="hidden"
+                                id="intervalo-habilitado"
+                                name="intervalo_habilitado"
+                                value="1"
+                            >
+
+                            <button
+                                id="btn-intervalo"
+                                type="button"
+                            >
+                                <img class="icone-svg" src="{{ url_for('static', filename='icons/Timer_Icon.svg') }}" alt="">
+                                Intervalo: Ativado
+                            </button>
+
+                            <div id="info-intervalo">
+                                2 minutos entre cada rodada
+                            </div>
+
+                        </div>
+
+                        <!-- =========================
+                             ÚLTIMO SOBREVIVENTE
+                        ========================= -->
+
+                        <div id="config-sobrevivente">
+
+                            <input
+                                type="hidden"
+                                id="ultimo-sobrevivente-habilitado"
+                                name="ultimo_sobrevivente_vencedor"
+                                value="0"
+                            >
+
+                            <button
+                                id="btn-sobrevivente"
+                                type="button"
+                                class="desativado"
+                            >
+                                <img class="icone-svg" src="{{ url_for('static', filename='icons/Crown_Icon.svg') }}" alt="">
+                                Último sobrevivente: desativado
+                            </button>
+
+                            <div id="info-sobrevivente">
+                                Se todos morrerem, vence quem tiver mais pontos
+                            </div>
+
+                        </div>
+
+                        <!-- =========================
+                             RODADAS
+                        ========================= -->
+
+                        <label for="total-rodadas">
+                            <img class="icone-svg" src="{{ url_for('static', filename='icons/Rotation_Icon.svg') }}" alt="">
+                            Número de rodadas
+                        </label>
+
+                        <input
+                            type="number"
+                            id="total-rodadas"
+                            name="total_rodadas"
+                            value="6"
+                            min="1"
+                            max="20"
+                            required
+                        >
+
+                        <div class="ajuda">
+                            Escolha de 1 até 20 rodadas
+                        </div>
+
+                        <!-- =========================
+                             TEMPO
+                        ========================= -->
+
+                        <label for="tempo">
+                            <img class="icone-svg" src="{{ url_for('static', filename='icons/Timer_Icon.svg') }}" alt="">
+                            Tempo por rodada
+                            (segundos)
+                        </label>
+
+                        <input
+                            type="number"
+                            id="tempo"
+                            name="tempo"
+                            value="120"
+                            min="30"
+                            max="600"
+                            required
+                        >
+
+                        <!-- =========================
+                             JOGADORES
+                        ========================= -->
+
+                        <label for="max-jogadores">
+                            <img class="icone-svg" src="{{ url_for('static', filename='icons/Users_Icon.svg') }}" alt="">
+                            Máximo de jogadores
+                        </label>
+
+                        <input
+                            type="number"
+                            id="max-jogadores"
+                            name="max_jogadores"
+                            value="10"
+                            min="2"
+                            max="20"
+                            required
+                        >
+
+                        <div
+                            class="ajuda"
+                            id="ajuda-jogadores"
+                        >
+                            Máximo de pessoas na sala
+                        </div>
+
+                        <!-- =========================
+                             LETRAS
+                        ========================= -->
+
+                        <label>
+                            <img class="icone-svg" src="{{ url_for('static', filename='icons/ABC_Alphabet_Icon.svg') }}" alt="">
+                            Letras que não serão sorteadas
+                        </label>
+
+                        <div class="letras">
+
+                            {% for letra in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" %}
+
+                                <label>
+
+                                    <input
+                                        type="checkbox"
+                                        name="letras_removidas"
+                                        value="{{ letra }}"
+                                    >
+
+                                    {{ letra }}
+
+                                </label>
+
+                            {% endfor %}
+
+                        </div>
+
+                        <div
+                            id="aviso-repeticao-letra"
+                            class="aviso-config"
+                            style="display: none;"
+                        >
+                            ⚠️ O jogo vai repetir a letra várias vezes com essa configuração!
+                        </div>
+
+                    </div>
+
+                    <button type="submit">
+                        Criar sala
+                    </button>
+
+                </form>
+
+            </div>
+
+            <!-- =========================
+                 ENTRAR
+            ========================= -->
+
+            <div class="card">
+
+                <h2><img class="icone-titulo-svg" src="{{ url_for('static', filename='icons/Door_Icon.svg') }}" alt="">Entrar na sala</h2>
+
+                <p>
+                    Jogue com amigos usando o código da sala!
+                </p>
+
+                <form
+                    action="/entrar"
+                    method="POST"
+                >
+
+                    <input
+                        type="text"
+                        name="nome"
+                        placeholder="seu nome"
+                        maxlength="20"
+                        pattern="[A-Za-z0-9_]+"
+                        title="use apenas letras, números e _"
+                        required
+                    >
+
+                    <input
+                        type="text"
+                        name="codigo"
+                        placeholder="código da sala"
+                        maxlength="6"
+                        pattern="[A-Za-z0-9]+"
+                        title="use apenas letras e números"
+                        required
+                    >
+
+                    <button type="submit">
+                        Entrar na sala
+                    </button>
+
+                </form>
+
+            </div>
+
+        
+            <a
+                href="{{ url_for('tutorial') }}"
+                class="botao-tutorial"
+            >
+                <img class="icone-svg" src="{{ url_for('static', filename='icons/GraduationCap_Icon.svg') }}" alt="">
+                Aprender a jogar!
+            </a>
+
+        </div>
+
+    </div>
+
+
+        <!-- =========================
+             ASSINATURA
+        ========================= -->
+
+        <div class="assinatura">
+
+        <div class="assinatura-imagem">
+            <img
+                src="{{ url_for('static', filename='assinatura.png') }}"
+                alt="Assinatura de Kauan dos Santos Tostes"
+            >
+        </div>
+
+        <div class="assinatura-nome">
+            Kauan dos Santos Tostes + ChatGPT
+        </div>
+
+        <div class="assinatura-meta">
+            08/2026
+        </div>
+
+    </div>
+
+    <!-- =========================
+         MÚSICA
+    ========================= -->
+
+    <audio id="musica-lobby" loop>
+
+        <source
+            src="{{ url_for('static', filename='musicas/lobby.mp3') }}"
+            type="audio/mpeg"
+        >
+
+    </audio>
+
+    <div class="musica-bloco">
+
+        <div class="musica-titulo">
+            <img class="icone-svg" src="{{ url_for('static', filename='icons/MusicalNote_Icon.svg') }}" alt="">
+            Música
+        </div>
+
+        <button
+            id="botao-musica"
+            class="botao-musica"
+            type="button"
+        >
+            <img class="icone-svg" src="{{ url_for('static', filename='icons/MusicalNote_Icon.svg') }}" alt="">
+            Música ligada
+        </button>
+
+    </div>
+
+    <script>
+
+        // =====================================================
+        // CAMINHOS DOS ÍCONES
+        // =====================================================
+
+        const ICON_TIMER =
+            "{{ url_for('static', filename='icons/Timer_Icon.svg') }}";
+
+        const ICON_NEXT =
+            "{{ url_for('static', filename='icons/Next_Track_Icon.svg') }}";
+
+        const ICON_CROWN =
+            "{{ url_for('static', filename='icons/Crown_Icon.svg') }}";
+
+        const ICON_MUSIC =
+            "{{ url_for('static', filename='icons/MusicalNote_Icon.svg') }}";
+
+        // =====================================================
+        // MODO SOLO / MULTIPLAYER
+        // =====================================================
+
+        const modos =
+            document.querySelectorAll(
+                'input[name="modo"]'
+            );
+
+        const campoMaxJogadores =
+            document.querySelector(
+                "#max-jogadores"
+            );
+
+        const ajudaJogadores =
+            document.querySelector(
+                "#ajuda-jogadores"
+            );
+
+        const configIntervalo =
+            document.querySelector(
+                "#config-intervalo"
+            );
+
+        const btnIntervalo =
+            document.querySelector(
+                "#btn-intervalo"
+            );
+
+        const intervaloHabilitado =
+            document.querySelector(
+                "#intervalo-habilitado"
+            );
+
+        const configSobrevivente =
+            document.querySelector(
+                "#config-sobrevivente"
+            );
+
+        const btnSobrevivente =
+            document.querySelector(
+                "#btn-sobrevivente"
+            );
+
+        const ultimoSobreviventeHabilitado =
+            document.querySelector(
+                "#ultimo-sobrevivente-habilitado"
+            );
+
+        const campoTotalRodadas =
+            document.querySelector(
+                "#total-rodadas"
+            );
+
+        const letrasRemovidas =
+            document.querySelectorAll(
+                'input[name="letras_removidas"]'
+            );
+
+        const avisoRepeticaoLetra =
+            document.querySelector(
+                "#aviso-repeticao-letra"
+            );
+
+        function atualizarAvisoRepeticaoLetra() {
+
+            const totalRodadas =
+                Number(campoTotalRodadas.value) || 0;
+
+            const quantidadeRemovidas =
+                Array.from(letrasRemovidas)
+                    .filter(input => input.checked)
+                    .length;
+
+            const letrasDisponiveis =
+                26 - quantidadeRemovidas;
+
+            const capacidadeSemExcesso =
+                letrasDisponiveis * 2;
+
+            const precisaRepetir =
+                totalRodadas > capacidadeSemExcesso;
+
+            avisoRepeticaoLetra.style.display =
+                precisaRepetir ? "block" : "none";
+
+        }
+
+        function atualizarModo() {
+
+            const modoSelecionado =
+                document.querySelector(
+                    'input[name="modo"]:checked'
+                ).value;
+
+            // =========================================
+            // SOLO
+            // =========================================
+
+            if (modoSelecionado === "solo") {
+
+                campoMaxJogadores.value = 1;
+
+                campoMaxJogadores.disabled = true;
+
+                campoMaxJogadores.removeAttribute(
+                    "required"
+                );
+
+                ajudaJogadores.textContent =
+                    "modo solo: somente você";
+
+                // intervalo não existe no solo
+
+                configIntervalo.style.display =
+                    "none";
+
+                intervaloHabilitado.value =
+                    "0";
+
+                configSobrevivente.style.display =
+                    "none";
+
+                ultimoSobreviventeHabilitado.value =
+                    "0";
+
+            }
+
+            // =========================================
+            // MULTIPLAYER
+            // =========================================
+
+            else {
+
+                campoMaxJogadores.disabled =
+                    false;
+
+                campoMaxJogadores.setAttribute(
+                    "required",
+                    ""
+                );
+
+                if (
+                    Number(campoMaxJogadores.value) < 2
+                ) {
+
+                    campoMaxJogadores.value =
+                        10;
+
+                }
+
+                ajudaJogadores.textContent =
+                    "máximo de pessoas na sala";
+
+                configIntervalo.style.display =
+                    "block";
+
+                configSobrevivente.style.display =
+                    "block";
+
+                atualizarBotaoIntervalo();
+                atualizarBotaoSobrevivente();
+
+            }
+
+        }
+
+        modos.forEach(function(modo) {
+
+            modo.addEventListener(
+                "change",
+                atualizarModo
+            );
+
+        });
+
+        campoTotalRodadas.addEventListener(
+            "input",
+            atualizarAvisoRepeticaoLetra
+        );
+
+        letrasRemovidas.forEach(function(input) {
+
+            input.addEventListener(
+                "change",
+                atualizarAvisoRepeticaoLetra
+            );
+
+        });
+
+        // =====================================================
+        // INTERVALO
+        // =====================================================
+
+        function atualizarBotaoIntervalo() {
+
+            if (
+                intervaloHabilitado.value === "1"
+            ) {
+
+                btnIntervalo.innerHTML =
+                    `<img class="icone-svg" src="${ICON_TIMER}" alt="">intervalo: ativado`;
+
+                btnIntervalo.classList.remove(
+                    "desativado"
+                );
+
+                document.getElementById(
+                    "info-intervalo"
+                ).textContent =
+                    "2 minutos entre cada rodada";
+
+            }
+
+            else {
+
+                btnIntervalo.innerHTML =
+                    `<img class="icone-svg" src="${ICON_NEXT}" alt="">intervalo: desativado`;
+
+                btnIntervalo.classList.add(
+                    "desativado"
+                );
+
+                document.getElementById(
+                    "info-intervalo"
+                ).textContent =
+                    "as rodadas começam automaticamente";
+
+            }
+
+        }
+
+        btnIntervalo.addEventListener(
+            "click",
+            function() {
+
+                if (
+                    intervaloHabilitado.value === "1"
+                ) {
+
+                    intervaloHabilitado.value =
+                        "0";
+
+                }
+
+                else {
+
+                    intervaloHabilitado.value =
+                        "1";
+
+                }
+
+                atualizarBotaoIntervalo();
+
+            }
+        );
+
+        // =====================================================
+        // ÚLTIMO SOBREVIVENTE
+        // =====================================================
+
+        function atualizarBotaoSobrevivente() {
+
+            if (
+                ultimoSobreviventeHabilitado.value === "1"
+            ) {
+
+                btnSobrevivente.innerHTML =
+                    `<img class="icone-svg" src="${ICON_CROWN}" alt="">último sobrevivente: ativado`;
+
+                btnSobrevivente.classList.remove(
+                    "desativado"
+                );
+
+                document.getElementById(
+                    "info-sobrevivente"
+                ).textContent =
+                    "se sobrar 1 jogador vivo, ele vence imediatamente";
+
+            }
+
+            else {
+
+                btnSobrevivente.innerHTML =
+                    `<img class="icone-svg" src="${ICON_CROWN}" alt="">último sobrevivente: desativado`;
+
+                btnSobrevivente.classList.add(
+                    "desativado"
+                );
+
+                document.getElementById(
+                    "info-sobrevivente"
+                ).textContent =
+                    "se todos morrerem, vence quem tiver mais pontos";
+
+            }
+
+        }
+
+        btnSobrevivente.addEventListener(
+            "click",
+            function() {
+
+                if (
+                    ultimoSobreviventeHabilitado.value === "1"
+                ) {
+
+                    ultimoSobreviventeHabilitado.value =
+                        "0";
+
+                }
+
+                else {
+
+                    ultimoSobreviventeHabilitado.value =
+                        "1";
+
+                }
+
+                atualizarBotaoSobrevivente();
+
+            }
+        );
+
+        atualizarModo();
+        atualizarAvisoRepeticaoLetra();
+
+        // =====================================================
+        // NOME
+        // =====================================================
+
+        const nomes =
+            document.querySelectorAll(
+                'input[name="nome"]'
+            );
+
+        nomes.forEach(function(input) {
+
+            input.addEventListener(
+                "input",
+                function() {
+
+                    this.value =
+                        this.value.replace(
+                            /[^a-zA-Z0-9_]/g,
+                            ""
+                        );
+
+                }
+            );
+
+        });
+
+        // =====================================================
+        // CÓDIGO DA SALA
+        // =====================================================
+
+        const codigo =
+            document.querySelector(
+                'input[name="codigo"]'
+            );
+
+        codigo.addEventListener(
+            "input",
+            function() {
+
+                this.value =
+                    this.value
+                        .replace(
+                            /[^a-zA-Z0-9]/g,
+                            ""
+                        )
+                        .toUpperCase();
+
+            }
+        );
+
+        // =====================================================
+        // MÚSICA
+        // =====================================================
+
+        const musicaLobby =
+            document.getElementById(
+                "musica-lobby"
+            );
+
+        const botaoMusica =
+            document.getElementById(
+                "botao-musica"
+            );
+
+        let musicaLigada = true;
+
+        musicaLobby.volume =
+            0.35;
+
+        function tocarMusica() {
+
+            if (!musicaLigada) {
+                return;
+            }
+
+            musicaLobby.play().catch(() => {
+
+                console.log(
+                    "a música começará após uma interação."
+                );
+
+            });
+
+        }
+
+        botaoMusica.addEventListener(
+            "click",
+            function() {
+
+                musicaLigada =
+                    !musicaLigada;
+
+                if (musicaLigada) {
+
+                    botaoMusica.innerHTML =
+                        `<img class="icone-svg" src="${ICON_MUSIC}" alt="">música ligada`;
+
+                    tocarMusica();
+
+                }
+
+                else {
+
+                    musicaLobby.pause();
+
+                    botaoMusica.innerHTML =
+                        `<img class="icone-svg" src="${ICON_MUSIC}" alt="">música desligada`;
+
+                }
+
+            }
+        );
+
+        document.addEventListener(
+            "click",
+            function iniciarMusica() {
+
+                if (musicaLigada) {
+
+                    tocarMusica();
+
+                }
+
+                document.removeEventListener(
+                    "click",
+                    iniciarMusica
+                );
+
+            },
+            { once: true }
+        );
+
+
+
+    </script>
+
+
+
+</body>
+
+
+
+</html>

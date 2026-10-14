@@ -1,0 +1,52 @@
+{
+    "estilo":{
+        "Sertanejo" : {
+            "Artistas" : {
+                "Gusttavo Lima" : {
+                    "musica" : "https://youtu.be/B9Mi1-qn_PQ?si=aOMHtOnxPZa3j0kh",
+                    "sobre" : "Gusttavo.txt"
+                },
+                "Teodoro e Sampaio" : {
+                    "musica" : "https://www.youtube.com/watch?v=tEKWg9vhLYw&list=RDtEKWg9vhLYw&start_radio=1",
+                    "sobre" : "Teodoro_Sampaio.txt"
+                }
+            }
+        },
+        "Eurodance" : {
+            "Artistas" : {
+                "Kasino" : {
+                    "musica" : "https://youtu.be/-wZl_ZhnVg4?si=n0Y1aPfHMdkY4B6G",
+                    "sobre" : "Kasino.txt"
+                },
+                "G.E.M." : {
+                    "musica" : "https://youtu.be/yXYOIvo-94U?si=-UFPuNEGL9YY9kTG",
+                    "sobre" : "GEM.txt"
+                }
+            }
+        },
+        "Rap" : {
+            "Artistas" : {
+                "Chingy" : {
+                    "musica" : "https://youtu.be/tRqYhYFjCvs?si=FFeIIWuhfCS5ipxO",
+                    "sobre" : "Chingy.txt"
+                },
+                "Mr. Cheeks" : {
+                    "musica" : "https://youtu.be/yBgNo2BzABA?si=FGiPOYj53hO5ZKfx",
+                    "sobre" : "MrCheecks.txt"
+                }
+            }
+        },
+        "Forró" : {
+            "Artistas" : {
+                "Forró top 10" : {
+                    "musica" : "https://youtu.be/rwYKAzgjh-E?si=SHG6WC8WM15_Xqeo",
+                    "sobre" : "Forro10.txt"
+                },
+                "Forró boys" : {
+                    "musica" : "https://www.youtube.com/watch?v=u3JXbF3RwY0&list=RDu3JXbF3RwY0&start_radio=1",
+                    "sobre" : "ForroBoys.txt"
+                }
+            }
+        }
+    }
+}

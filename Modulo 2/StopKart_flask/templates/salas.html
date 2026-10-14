@@ -1,0 +1,5317 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Stopkart - Sala {{ codigo }}</title>
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="{{ url_for('static', filename='logo.png') }}"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        /* ==========================================
+           FUNDO
+        ========================================== */
+
+        html {
+            min-height: 100%;
+            background: #101114;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background:
+                radial-gradient(
+                    circle at 10% 10%,
+                    rgba(80, 100, 160, 0.13),
+                    transparent 32%
+                ),
+                radial-gradient(
+                    circle at 90% 20%,
+                    rgba(130, 80, 160, 0.10),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 50% 100%,
+                    rgba(60, 120, 150, 0.08),
+                    transparent 35%
+                ),
+                #101114;
+            background-attachment: fixed;
+            color: #f2f2f2;
+            font-family: Inter, sans-serif;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -2;
+            background-image:
+                linear-gradient(
+                    rgba(255,255,255,0.018) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,0.018) 1px,
+                    transparent 1px
+                );
+            background-size: 42px 42px;
+            mask-image: linear-gradient(
+                to bottom,
+                transparent,
+                black 15%,
+                black 85%,
+                transparent
+            );
+            -webkit-mask-image: linear-gradient(
+                to bottom,
+                transparent,
+                black 15%,
+                black 85%,
+                transparent
+            );
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            width: 520px;
+            height: 520px;
+            left: -220px;
+            top: 35%;
+            border-radius: 50%;
+            background: rgba(90, 110, 190, 0.07);
+            filter: blur(90px);
+            pointer-events: none;
+            z-index: -1;
+            animation: fundoFlutuar 12s ease-in-out infinite alternate;
+        }
+
+        @keyframes fundoFlutuar {
+
+            from {
+                transform: translate(
+                    0,
+                    -40px
+                );
+            }
+
+            to {
+                transform: translate(
+                    180px,
+                    70px
+                );
+            }
+
+        }
+
+
+        /* ==========================================
+           HEADER
+        ========================================== */
+
+        header {
+            padding: 20px 40px;
+            background: rgba(21, 22, 26, 0.88);
+            border-bottom: 1px solid #292b30;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .codigo {
+            padding: 9px 15px;
+            border-radius: 9px;
+            background: rgba(34, 36, 42, 0.88);
+            color: #ccc;
+            font-weight: 600;
+        }
+
+
+        /* ==========================================
+           MENU
+        ========================================== */
+
+        .menu,
+        .aba {
+            width: calc(100% - 30px);
+            max-width: 1030px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .menu {
+            margin-top: 28px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .menu button {
+            padding: 12px 22px;
+            border: 0;
+            border-radius: 10px;
+            background: #22242a;
+            color: #bbb;
+            font-weight: 700;
+            cursor: pointer;
+            transition:
+                background .2s,
+                transform .2s;
+        }
+
+        .menu button:hover {
+            background: #292c33;
+            transform: translateY(-1px);
+        }
+
+        .menu button.ativo {
+            background: #30333a;
+            color: #fff;
+        }
+
+        .menu button.botao-musica-menu {
+            margin-left: auto;
+            padding: 12px 16px;
+            border: 1px solid #303239;
+            color: #ccc;
+            white-space: nowrap;
+        }
+
+        .menu button.botao-musica-menu:hover {
+            color: #fff;
+        }
+
+
+        /* ==========================================
+           ABAS
+        ========================================== */
+
+        .aba {
+            display: none;
+            margin-top: 22px;
+            margin-bottom: 35px;
+        }
+
+        .aba.ativa {
+            display: block;
+        }
+
+
+        /* ==========================================
+           CARDS
+        ========================================== */
+
+        .card {
+            background: rgba(24, 25, 30, 0.91);
+            border: 1px solid rgba(41, 43, 49, 0.95);
+            border-radius: 15px;
+            padding: 26px;
+            box-shadow:
+                0 10px 30px rgba(0,0,0,0.18);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        h2 {
+            margin: 0 0 20px;
+            font-size: 27px;
+        }
+
+        h3 {
+            color: #bbb;
+        }
+
+
+        /* ==========================================
+           LOBBY
+        ========================================== */
+
+        .lobby-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .jogadores {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .jogadores li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 13px 15px;
+            margin-bottom: 8px;
+            background: #22242a;
+            border-radius: 9px;
+        }
+
+        .jogador-info {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            min-width: 0;
+        }
+
+        .jogador-nome {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .host {
+            color: #ffd86b;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .vidas {
+            color: #ff7777;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .pontos-lobby {
+            color: #8db4ff;
+            font-weight: 700;
+            margin-right: 12px;
+            white-space: nowrap;
+        }
+
+        .eliminado {
+            opacity: .45;
+        }
+
+        .jogador-acoes {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .btn-expulsar {
+            width: 28px;
+            height: 28px;
+            padding: 0;
+            border: 1px solid #4a3030;
+            border-radius: 7px;
+            background: #302326;
+            color: #ff7777;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+            transition:
+                background .2s,
+                transform .2s,
+                border-color .2s;
+        }
+
+        .btn-expulsar:hover {
+            background: #49292d;
+            border-color: #754047;
+            transform: scale(1.05);
+        }
+
+        .config {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .config div {
+            padding: 12px;
+            background: #22242a;
+            border-radius: 9px;
+            color: #aaa;
+        }
+
+        .config strong {
+            display: block;
+            color: #fff;
+            font-size: 16px;
+            margin-top: 4px;
+        }
+
+
+        /* ==========================================
+           JOGO
+        ========================================== */
+
+        .jogo-grid {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 20px;
+        }
+
+        .letra-card {
+            min-height: 370px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .letra-label {
+            color: #999;
+        }
+
+        .letra {
+            font-size: 105px;
+            font-weight: 800;
+            margin: 12px 0;
+        }
+
+        .instrucao {
+            color: #aaa;
+        }
+
+        .status {
+            display: flex;
+            gap: 42px;
+            margin-top: 30px;
+            padding-top: 22px;
+            border-top: 1px solid #292b31;
+        }
+
+        .status div {
+            text-align: center;
+            color: #888;
+            font-size: 12px;
+        }
+
+        .status strong {
+            display: block;
+            color: #fff;
+            font-size: 18px;
+            margin-top: 5px;
+        }
+
+
+        /* ==========================================
+           INPUTS
+        ========================================== */
+
+        .entrada {
+            display: flex;
+            gap: 9px;
+        }
+
+        .entrada input {
+            flex: 1;
+            min-width: 0;
+        }
+
+        input {
+            padding: 13px 14px;
+            border-radius: 9px;
+            border: 1px solid #303239;
+            background: #101114;
+            color: #fff;
+            font-family: inherit;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #666;
+        }
+
+        .acao {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            vertical-align: top;
+            padding: 13px 17px;
+            border: 0;
+            border-radius: 9px;
+            background: #f2f2f2;
+            color: #111;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .acao:disabled,
+        input:disabled {
+            opacity: .4;
+            cursor: not-allowed;
+        }
+
+
+        /* ==========================================
+           RESPOSTAS
+        ========================================== */
+
+        #carros-enviados {
+            margin-top: 20px;
+            max-height: 230px;
+            overflow-y: auto;
+        }
+
+        .carro-item,
+        .chat-msg {
+            padding: 11px 13px;
+            margin-bottom: 7px;
+            border-radius: 8px;
+            background: #22242a;
+        }
+
+        .carro-item {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .carro-jogador {
+            color: #999;
+            font-size: 12px;
+        }
+
+
+        /* ==========================================
+           CHAT
+        ========================================== */
+
+        #chat {
+            height: 500px;
+            padding: 18px;
+            overflow-y: auto;
+            background: #101114;
+            border: 1px solid #292b31;
+            border-radius: 12px;
+        }
+
+        .chat-nome {
+            font-weight: 700;
+        }
+
+        .chat-bloqueado {
+            color: #ff7777;
+        }
+
+        .entrada-chat {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .entrada-chat input {
+            flex: 1;
+        }
+
+
+        /* ==========================================
+           NOTIFICAÇÃO DO CHAT
+        ========================================== */
+
+        .notificacao-chat {
+            position: fixed;
+            top: 92px;
+            right: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 14px 11px 11px;
+            background: rgba(24, 25, 30, 0.96);
+            border: 1px solid #3b3e47;
+            border-radius: 12px;
+            box-shadow:
+                0 12px 35px rgba(0,0,0,0.35);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            cursor: pointer;
+            opacity: 0;
+            transform: translateX(25px) scale(.95);
+            pointer-events: none;
+            transition:
+                opacity .25s ease,
+                transform .25s ease;
+            z-index: 5000;
+        }
+
+        .notificacao-chat.ativa {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+            pointer-events: auto;
+        }
+
+        .notificacao-icone {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 9px;
+            background: #30333a;
+        }
+
+        .notificacao-icone img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .notificacao-texto {
+            min-width: 0;
+        }
+
+        .notificacao-titulo {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 2px;
+        }
+
+        .notificacao-mensagem {
+            max-width: 210px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        @keyframes pulsarNotificacao {
+
+            0% {
+                box-shadow:
+                    0 0 0 0 rgba(141,180,255,0.25),
+                    0 12px 35px rgba(0,0,0,0.35);
+            }
+
+            70% {
+                box-shadow:
+                    0 0 0 9px rgba(141,180,255,0),
+                    0 12px 35px rgba(0,0,0,0.35);
+            }
+
+            100% {
+                box-shadow:
+                    0 0 0 0 rgba(141,180,255,0),
+                    0 12px 35px rgba(0,0,0,0.35);
+            }
+
+        }
+
+        .notificacao-chat.ativa {
+            animation:
+                pulsarNotificacao 1.4s ease-out 2;
+        }
+
+
+        /* ==========================================
+           AVISO
+        ========================================== */
+
+        .aviso {
+            display: none;
+            margin-top: 18px;
+            padding: 12px;
+            border-radius: 9px;
+            background: #22242a;
+            text-align: center;
+            color: #aaa;
+        }
+
+        .conexao {
+            font-size: 13px;
+            color: #f77;
+            margin-bottom: 15px;
+        }
+
+
+        /* ==========================================
+           INTERVALO
+        ========================================== */
+
+        .intervalo-card {
+            display: none;
+            margin-top: 20px;
+            padding: 22px;
+            background: #22242a;
+            border: 1px solid #30333a;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .intervalo-card.ativo {
+            display: block;
+        }
+
+        .intervalo-titulo {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .intervalo-subtitulo {
+            color: #aaa;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .intervalo-tempo {
+            font-size: 42px;
+            font-weight: 800;
+            margin: 8px 0 18px;
+        }
+
+        .intervalo-info {
+            color: #aaa;
+            margin-bottom: 18px;
+        }
+
+        .btn-pular-intervalo {
+            padding: 12px 18px;
+            border: 0;
+            border-radius: 9px;
+            background: #f2f2f2;
+            color: #111;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-pular-intervalo:disabled {
+            opacity: .4;
+            cursor: not-allowed;
+        }
+
+
+        /* ==========================================
+           RANKING
+        ========================================== */
+
+        .ranking-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .78);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            z-index: 9999;
+            backdrop-filter: blur(8px);
+        }
+
+        .ranking-overlay.ativo {
+            display: flex;
+        }
+
+        .ranking-modal {
+            width: 100%;
+            max-width: 560px;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: #18191e;
+            border: 1px solid #33363d;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 30px 80px #000;
+        }
+
+        .ranking-titulo {
+            text-align: center;
+            margin-bottom: 8px;
+            font-size: 30px;
+            font-weight: 800;
+        }
+
+        .ranking-subtitulo {
+            text-align: center;
+            color: #999;
+            margin-bottom: 25px;
+        }
+
+        .ranking-lista {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .ranking-item {
+            display: grid;
+            grid-template-columns: 55px 1fr auto;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: #22242a;
+            border-radius: 12px;
+            border: 1px solid transparent;
+        }
+
+        .ranking-item.primeiro {
+            border-color: #66531f;
+            background: #29261d;
+        }
+
+        .ranking-posicao {
+            font-size: 21px;
+            font-weight: 800;
+            text-align: center;
+        }
+
+        .ranking-nome {
+            font-weight: 700;
+        }
+
+        .ranking-detalhes {
+            color: #999;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .ranking-pontos {
+            text-align: right;
+            font-weight: 800;
+            color: #8db4ff;
+        }
+
+        .ranking-botoes {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .ranking-botoes button {
+            padding: 12px 20px;
+            border: 0;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-fechar {
+            background: #30333a;
+            color: #fff;
+        }
+
+        .btn-final {
+            background: #f2f2f2;
+            color: #111;
+        }
+
+.solo-reinicio {
+            display: none;
+            margin-top: 18px;
+        }
+
+        .solo-reinicio-mensagem {
+            text-align: center;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        .solo-reinicio-botoes {
+            position: relative;
+            z-index: 21;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .solo-reinicio-botoes button {
+            position: relative;
+            z-index: 22;
+            pointer-events: auto;
+            padding: 12px 18px;
+            border: 0;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-jogar-novamente {
+            background: #f2f2f2;
+            color: #111;
+        }
+
+        .btn-voltar-inicio {
+            background: #30333a;
+            color: #fff;
+        }
+
+        .votacao-reinicio {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 18px;
+            border-top: 1px solid #33363d;
+        }
+
+        .votacao-reinicio.ativa {
+            display: flex;
+        }
+
+        .btn-votar-reinicio {
+            width: 100%;
+            padding: 13px 20px;
+            border: 0;
+            border-radius: 10px;
+            background: #f2f2f2;
+            color: #111;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .btn-votar-reinicio:disabled {
+            opacity: .55;
+            cursor: not-allowed;
+        }
+
+        .votacao-status {
+            color: #aaa;
+            font-size: 14px;
+            text-align: center;
+        }
+
+
+        /* ==========================================
+           SAIR DA SALA
+        ========================================== */
+
+        .botao-sair-menu {
+            margin-left: 0;
+            padding: 12px 16px;
+            border: 1px solid #303239;
+            border-radius: 10px;
+            background: #22242a;
+            color: #ccc;
+            font-weight: 700;
+            cursor: pointer;
+            transition:
+                background .2s,
+                color .2s,
+                transform .2s;
+        }
+
+        .botao-sair-menu:hover {
+            background: #382529;
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .botao-sair-menu:disabled {
+            opacity: .45;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .modal-sair-overlay {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, .68);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: 2000;
+        }
+
+        .modal-sair-overlay.ativo {
+            display: flex;
+        }
+
+        .modal-sair {
+            width: min(430px, 100%);
+            padding: 26px;
+            border-radius: 15px;
+            background: #18191e;
+            border: 1px solid #303239;
+            box-shadow: 0 20px 60px rgba(0,0,0,.45);
+        }
+
+        .modal-sair h2 {
+            margin: 0 0 10px;
+            font-size: 23px;
+        }
+
+        .modal-sair p {
+            margin: 0 0 18px;
+            color: #aaa;
+            line-height: 1.5;
+        }
+
+        .opcoes-host {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 260px;
+            overflow-y: auto;
+        }
+
+        .opcao-host {
+            width: 100%;
+            padding: 13px 15px;
+            border: 1px solid #303239;
+            border-radius: 10px;
+            background: #22242a;
+            color: #fff;
+            text-align: left;
+            font-family: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            transition:
+                background .2s,
+                border-color .2s,
+                transform .2s;
+        }
+
+        .opcao-host:hover {
+            background: #2b2e35;
+            border-color: #555a66;
+            transform: translateY(-1px);
+        }
+
+        .btn-cancelar-sair {
+            width: 100%;
+            margin-top: 14px;
+            padding: 12px 15px;
+            border: 0;
+            border-radius: 10px;
+            background: #30333a;
+            color: #fff;
+            font-family: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+
+        /* ==========================================
+           RESPONSIVO
+        ========================================== */
+
+        @media(max-width:850px) {
+
+            header {
+                padding: 18px;
+            }
+
+            .lobby-grid,
+            .jogo-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .letra {
+                font-size: 80px;
+            }
+
+            .notificacao-chat {
+                top: 82px;
+                right: 15px;
+            }
+
+        }
+
+
+        @media(max-width:600px) {
+
+            .menu {
+                flex-wrap: wrap;
+            }
+
+            .menu button {
+                padding: 11px 16px;
+            }
+
+            .menu button.botao-musica-menu {
+                margin-left: 0;
+            }
+
+            .jogadores li {
+                padding: 11px;
+            }
+
+            .pontos-lobby {
+                margin-right: 6px;
+            }
+
+        }
+
+
+        @media(max-width:500px) {
+
+            .entrada,
+            .entrada-chat {
+                flex-direction: column;
+            }
+
+            .entrada > *,
+            .entrada-chat > * {
+                width: 100%;
+            }
+
+            .ranking-modal {
+                padding: 20px;
+            }
+
+            .ranking-item {
+                grid-template-columns: 45px 1fr auto;
+            }
+
+            .logo-stopkart {
+                width: 70px;
+            }
+
+            .notificacao-chat {
+                left: 15px;
+                right: 15px;
+                width: auto;
+            }
+
+            .codigo {
+                font-size: 13px;
+                padding: 8px 10px;
+            }
+
+        }
+
+
+        /* ==========================================
+           ÍCONES SVG
+        ========================================== */
+
+        .icone {
+            width: 18px;
+            height: 18px;
+            vertical-align: -4px;
+            object-fit: contain;
+            display: inline-block;
+        }
+
+        .icone-titulo {
+            width: 24px;
+            height: 24px;
+            vertical-align: -5px;
+            object-fit: contain;
+            display: inline-block;
+        }
+
+        .icone-pequeno {
+            width: 15px;
+            height: 15px;
+            vertical-align: -3px;
+            object-fit: contain;
+            display: inline-block;
+        }
+
+        .logo-stopkart {
+            width: 90px;
+            height: auto;
+            object-fit: contain;
+            vertical-align: middle;
+        }
+
+    </style>
+
+</head>
+
+
+<body
+    data-codigo="{{ codigo }}"
+    data-nome="{{ nome }}"
+    data-host="{{ host }}"
+    data-modo="{{ modo }}"
+    data-jogo-iniciado="{{ 'true' if jogo_iniciado else 'false' }}"
+    data-em-intervalo="{{ 'true' if em_intervalo else 'false' }}"
+    data-max-jogadores="{{ max_jogadores }}"
+>
+
+
+    <!-- ==========================================
+         MÚSICAS
+    ========================================== -->
+
+    <audio
+        id="musica-lobby"
+        loop
+    >
+
+        <source
+            src="{{ url_for('static', filename='musicas/lobby.mp3') }}"
+            type="audio/mpeg"
+        >
+
+    </audio>
+
+
+    <audio
+        id="musica-jogo"
+        loop
+    >
+
+        <source
+            src="{{ url_for('static', filename='musicas/sala.mp3') }}"
+            type="audio/mpeg"
+        >
+
+    </audio>
+
+
+    <!-- ==========================================
+         NOTIFICAÇÃO CHAT
+    ========================================== -->
+
+    <div
+        id="notificacao-chat"
+        class="notificacao-chat"
+        onclick="abrirChatNotificacao()"
+    >
+
+        <div class="notificacao-icone">
+
+            <img
+                src="{{ url_for('static', filename='icons/Chat_Icon.svg') }}"
+                alt=""
+            >
+
+        </div>
+
+        <div class="notificacao-texto">
+
+            <div class="notificacao-titulo">
+                nova mensagem
+            </div>
+
+            <div
+                id="notificacao-mensagem"
+                class="notificacao-mensagem"
+            >
+                alguém mandou uma mensagem
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         HEADER
+    ========================================== -->
+
+    <header>
+
+        <div class="logo">
+
+            <img
+                src="{{ url_for('static', filename='RodaStopkart.png') }}"
+                class="logo-stopkart"
+                alt=""
+            >Stopkart
+
+        </div>
+
+        <div class="codigo">
+            Sala: {{ codigo }}
+        </div>
+
+    </header>
+
+
+    <!-- ==========================================
+         MENU
+    ========================================== -->
+
+    <div class="menu">
+
+        <button
+            id="btn-jogo"
+            class="ativo"
+            data-aba="jogo"
+            onclick="abrirAba('jogo')"
+        >
+
+            <img
+                src="{{ url_for('static', filename='icons/GameController_Icon.svg') }}"
+                class="icone"
+                alt=""
+            >
+
+            jogo
+
+        </button>
+
+
+        <button
+            id="btn-chat"
+            data-aba="chat"
+            onclick="abrirAba('chat')"
+        >
+
+            <img
+                src="{{ url_for('static', filename='icons/Chat_Icon.svg') }}"
+                class="icone"
+                alt=""
+            >
+
+            chat
+
+        </button>
+
+
+        <!-- MÚSICA AGORA FICA NO MENU -->
+
+        <button
+            id="botao-musica"
+            class="botao-musica-menu"
+            type="button"
+        >
+            <img
+                src="{{ url_for('static', filename='icons/MusicalNote_Icon.svg') }}"
+                class="icone"
+                alt=""
+            >
+            música
+        </button>
+
+
+        <button
+            id="botao-sair-sala"
+            class="botao-sair-menu"
+            type="button"
+        >
+            <img
+                src="{{ url_for('static', filename='icons/Door_Icon.svg') }}"
+                class="icone"
+                alt=""
+            >
+            sair da sala
+        </button>
+
+    </div>
+
+
+    <!-- ==========================================
+         JOGO
+    ========================================== -->
+
+    <div
+        id="jogo"
+        class="aba ativa"
+    >
+
+        <div class="lobby-grid">
+
+
+            <!-- LOBBY -->
+
+            <div class="card">
+
+                <h2>
+
+                    <img
+                        src="{{ url_for('static', filename='icons/Users_Icon.svg') }}"
+                        class="icone-titulo"
+                        alt=""
+                    >
+
+                    jogadores
+
+                </h2>
+
+
+                <div
+                    id="status-conexao"
+                    class="conexao"
+                >
+
+                    <img
+                        src="{{ url_for('static', filename='icons/RedCircle_Icon.svg') }}"
+                        class="icone"
+                        alt=""
+                    >
+
+                    conectando...
+
+                </div>
+
+
+                <ul
+                    id="lista-jogadores"
+                    class="jogadores"
+                >
+
+                    {% for jogador in jogadores %}
+
+                    <li>
+
+                        <div class="jogador-info">
+
+                            <span>
+
+                                {% if jogador.eliminado %}
+
+                                    <img
+                                        src="{{ url_for('static', filename='icons/Skull_Icon.svg') }}"
+                                        class="icone"
+                                        alt="eliminado"
+                                    >
+
+                                {% else %}
+
+                                    <img
+                                        src="{{ url_for('static', filename='icons/GreenCircle_Icon.svg') }}"
+                                        class="icone"
+                                        alt="online"
+                                    >
+
+                                {% endif %}
+
+                            </span>
+
+
+                            <span class="jogador-nome">
+                                {{ jogador.nome }}
+                            </span>
+
+
+                            {% if jogador.host %}
+
+                            <span class="host">
+                                HOST
+                            </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="jogador-acoes">
+
+                            <div>
+
+                                <span class="pontos-lobby">
+
+                                    <img
+                                        src="{{ url_for('static', filename='icons/Star_Icon.svg') }}"
+                                        class="icone"
+                                        alt=""
+                                    >
+
+                                    {{ jogador.pontos }}
+
+                                </span>
+
+
+                                <span class="vidas">
+
+                                    <img
+                                        src="{{ url_for('static', filename='icons/Heart_Icon.svg') }}"
+                                        class="icone"
+                                        alt=""
+                                    >
+
+                                    {{ jogador.vidas }}
+
+                                </span>
+
+                            </div>
+
+
+                            {% if nome == host and jogador.nome != nome and not jogo_iniciado %}
+
+                            <button
+                                class="btn-expulsar"
+                                type="button"
+                                title="expulsar jogador"
+                                data-jogador="{{ jogador.nome }}"
+                            >
+                                ✕
+                            </button>
+
+                            {% endif %}
+
+                        </div>
+
+                    </li>
+
+                    {% endfor %}
+
+                </ul>
+
+
+                <div class="config">
+
+                    <div>
+
+                        <img
+                            src="{{ url_for('static', filename='icons/Timer_Icon.svg') }}"
+                            class="icone"
+                            alt=""
+                        >
+
+                        tempo
+
+                        <strong>
+                            {{ tempo }}s
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <img
+                            src="{{ url_for('static', filename='icons/Users_Icon.svg') }}"
+                            class="icone"
+                            alt=""
+                        >
+
+                        máximo
+
+                        <strong>
+                            {{ max_jogadores }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PARTIDA -->
+
+            <div class="card">
+
+                <h2>
+
+                    <img
+                        src="{{ url_for('static', filename='icons/GameController_Icon.svg') }}"
+                        class="icone-titulo"
+                        alt=""
+                    >
+
+                    partida
+
+                </h2>
+
+
+                <p id="estado-partida">
+
+                    {% if jogo_iniciado %}
+
+                        {% if em_intervalo %}
+
+                            intervalo entre rodadas
+
+                        {% else %}
+
+                            partida em andamento
+
+                        {% endif %}
+
+                    {% else %}
+
+                        esperando o host iniciar...
+
+                    {% endif %}
+
+                </p>
+
+
+                {% if nome == host and not jogo_iniciado %}
+
+                <button
+                    id="botao-comecar"
+                    class="acao"
+                    disabled
+                >
+
+                    <img
+                        src="{{ url_for('static', filename='icons/Crown_Icon.svg') }}"
+                        class="icone"
+                        alt=""
+                    >
+
+                    começar jogo
+
+                </button>
+
+
+                <div
+                    id="aviso-inicio"
+                    class="aviso"
+                    style="display: block;"
+                >
+                    aguardando jogadores...
+                </div>
+
+                {% endif %}
+
+
+                {% if nome == host %}
+
+                <button
+                    id="botao-reiniciar-sala"
+                    class="acao"
+                    type="button"
+                >
+
+                    <img
+                        src="{{ url_for('static', filename='icons/Rotation_Icon.svg') }}"
+                        class="icone"
+                        alt=""
+                    >
+
+                    reiniciar sala
+
+                </button>
+
+                {% endif %}
+
+
+                <div
+                    id="aviso"
+                    class="aviso"
+                ></div>
+
+
+                <!-- INTERVALO -->
+
+                <div
+                    id="intervalo"
+                    class="intervalo-card"
+                >
+
+                    <div class="intervalo-titulo">
+                        ⏸️ intervalo entre rodadas
+                    </div>
+
+
+                    <div
+                        id="intervalo-subtitulo"
+                        class="intervalo-subtitulo"
+                    >
+                        próxima letra em breve
+                    </div>
+
+
+                    <div
+                        id="tempo-intervalo"
+                        class="intervalo-tempo"
+                    >
+                        02:00
+                    </div>
+
+
+                    <div
+                        id="intervalo-info"
+                        class="intervalo-info"
+                    >
+
+                        <img
+                            src="{{ url_for('static', filename='icons/Chat_Icon.svg') }}"
+                            class="icone"
+                            alt=""
+                        >
+
+                        chat liberado durante o intervalo
+
+                    </div>
+
+
+                    <button
+                        id="btn-pular-intervalo"
+                        class="btn-pular-intervalo"
+                        style="display: none;"
+                    >
+                        pular intervalo
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <br>
+
+
+        <!-- ÁREA DO JOGO -->
+
+        <div class="jogo-grid">
+
+
+            <!-- LETRA -->
+
+            <div class="card letra-card">
+
+                <div class="letra-label">
+                    letra sorteada
+                </div>
+
+
+                <h1
+                    id="letra"
+                    class="letra"
+                    {% if not jogo_iniciado %}
+                    style="display:none"
+                    {% endif %}
+                >
+                    ?
+                </h1>
+
+
+                <p class="instrucao">
+                    digite um modelo de carro
+                </p>
+
+
+                <div class="status">
+
+                    <div>
+
+                        rodada
+
+                        <strong id="rodada">
+                            0/{{ total_rodadas }}
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <img
+                            src="{{ url_for('static', filename='icons/Star_Icon.svg') }}"
+                            class="icone"
+                            alt=""
+                        >
+
+                        pontos
+
+                        <strong id="meus-pontos">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <img
+                            src="{{ url_for('static', filename='icons/Heart_Icon.svg') }}"
+                            class="icone"
+                            alt=""
+                        >
+
+                        vidas
+
+                        <strong id="minhas-vidas">
+                            3
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <img
+                            src="{{ url_for('static', filename='icons/Timer_Icon.svg') }}"
+                            class="icone"
+                            alt=""
+                        >
+
+                        tempo
+
+                        <strong id="tempo">
+                            {{ "%02d:%02d"|format(tempo//60, tempo%60) }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RESPOSTAS -->
+
+            <div class="card">
+
+                <h2>
+
+                    <img
+                        src="{{ url_for('static', filename='icons/Car_Icon.svg') }}"
+                        class="icone-titulo"
+                        alt=""
+                    >
+
+                    respostas
+
+                </h2>
+
+
+                <div class="entrada">
+
+                    <input
+                        id="campo-carro"
+                        placeholder="comece o jogo..."
+                        disabled
+                        autocomplete="off"
+                    >
+
+
+                    <button
+                        id="botao-carro"
+                        class="acao"
+                        disabled
+                    >
+                        enviar
+                    </button>
+
+                </div>
+
+
+                <div id="carros-enviados"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         CHAT
+    ========================================== -->
+
+    <div
+        id="chat-aba"
+        class="aba"
+    >
+
+        <div class="card">
+
+            <h2>
+
+                <img
+                    src="{{ url_for('static', filename='icons/Chat_Icon.svg') }}"
+                    class="icone"
+                    alt=""
+                >
+
+                chat da sala
+
+            </h2>
+
+
+            <div id="chat"></div>
+
+
+            <div class="entrada-chat">
+
+                <input
+                    id="campo-chat"
+                    placeholder="escreva uma mensagem..."
+                    autocomplete="off"
+                >
+
+
+                <button
+                    id="botao-chat"
+                    class="acao"
+                >
+                    enviar
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         MODAL SAIR DA SALA
+    ========================================== -->
+
+    <div
+        id="modal-sair-sala"
+        class="modal-sair-overlay"
+    >
+
+        <div class="modal-sair">
+
+            <h2>
+                <img
+                    src="{{ url_for('static', filename='icons/Crown_Icon.svg') }}"
+                    class="icone-titulo"
+                    alt=""
+                >
+                escolher novo host
+            </h2>
+
+            <p>
+                você é o host. antes de sair, escolha qual jogador vai assumir o host da sala.
+            </p>
+
+            <div
+                id="opcoes-novo-host"
+                class="opcoes-host"
+            ></div>
+
+            <button
+                id="btn-cancelar-sair"
+                class="btn-cancelar-sair"
+                type="button"
+            >
+                cancelar
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         RANKING
+    ========================================== -->
+
+    <div
+        id="ranking-overlay"
+        class="ranking-overlay"
+    >
+
+        <div class="ranking-modal">
+
+            <div
+                id="ranking-titulo"
+                class="ranking-titulo"
+            >
+
+                <img
+                    src="{{ url_for('static', filename='icons/Trophy_Icon.svg') }}"
+                    class="icone-titulo"
+                    alt=""
+                >
+
+                ranking
+
+            </div>
+
+
+            <div
+                id="ranking-subtitulo"
+                class="ranking-subtitulo"
+            >
+                resultado da rodada
+            </div>
+
+
+            <div
+                id="ranking-lista"
+                class="ranking-lista"
+            ></div>
+
+
+            <div
+                id="solo-reinicio"
+                class="solo-reinicio"
+            >
+
+                <div
+                    id="solo-reinicio-mensagem"
+                    class="solo-reinicio-mensagem"
+                >
+                    você perdeu todas as vidas. quer jogar novamente?
+                </div>
+
+                <div class="solo-reinicio-botoes">
+
+                    <button
+                        id="btn-jogar-novamente"
+                        class="btn-jogar-novamente"
+                        type="button"
+                    >
+                        <img src="{{ url_for('static', filename='icons/Rotation_Icon.svg') }}" class="icone" alt=""> jogar novamente
+                    </button>
+
+                    <button
+                        id="btn-voltar-inicio"
+                        class="btn-voltar-inicio"
+                        type="button"
+                    >
+                        🏠 voltar ao início
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="votacao-reinicio"
+                class="votacao-reinicio"
+            >
+
+                <div
+                    id="votacao-status"
+                    class="votacao-status"
+                >
+                    0/0 jogadores votaram
+                </div>
+
+                <button
+                    id="btn-votar-reinicio"
+                    class="btn-votar-reinicio"
+                    type="button"
+                >
+                    <img src="{{ url_for('static', filename='icons/Rotation_Icon.svg') }}" class="icone" alt=""> votar para reiniciar
+                </button>
+
+            </div>
+
+
+            <div class="ranking-botoes">
+
+                <button
+                    id="btn-fechar-ranking"
+                    class="btn-fechar"
+                    onclick="fecharRanking()"
+                >
+                    continuar
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+
+
+    <script>
+
+        // ==========================================
+        // DADOS
+        // ==========================================
+
+        const dadosPagina = document.body.dataset;
+
+        const codigoSala =
+            dadosPagina.codigo;
+
+        const meuNome =
+            dadosPagina.nome;
+
+        const nomeHost =
+            dadosPagina.host;
+
+        const modoSala =
+            dadosPagina.modo;
+
+        const modoSolo =
+            modoSala === "solo";
+
+        const souHost =
+            meuNome === nomeHost;
+
+        const maxJogadoresSala =
+            Number(
+                dadosPagina.maxJogadores || 0
+            );
+
+
+        // ==========================================
+        // ÍCONES SVG
+        // ==========================================
+
+        const ICONES = {
+
+            user:
+                "/static/icons/User_Icon.svg",
+
+            rotation:
+                "/static/icons/Rotation_Icon.svg",
+
+            abc:
+                "/static/icons/ABC_Alphabet_Icon.svg",
+
+            door:
+                "/static/icons/Door_Icon.svg",
+
+            star:
+                "/static/icons/Star_Icon.svg",
+
+            settings:
+                "/static/icons/Settings_Icon.svg",
+
+            trophy:
+                "/static/icons/Trophy_Icon.svg",
+
+            timer:
+                "/static/icons/Timer_Icon.svg",
+
+            skull:
+                "/static/icons/Skull_Icon.svg",
+
+            red:
+                "/static/icons/RedCircle_Icon.svg",
+
+            green:
+                "/static/icons/GreenCircle_Icon.svg",
+
+            car:
+                "/static/icons/Car_Icon.svg",
+
+            heart:
+                "/static/icons/Heart_Icon.svg",
+
+            crown:
+                "/static/icons/Crown_Icon.svg",
+
+            users:
+                "/static/icons/Users_Icon.svg",
+
+            chat:
+                "/static/icons/Chat_Icon.svg",
+
+            game:
+                "/static/icons/GameController_Icon.svg",
+
+            music:
+                "/static/icons/MusicalNote_Icon.svg",
+
+            logo:
+                "/static/RodaStopkart.png"
+
+        };
+
+
+        // ==========================================
+        // MÚSICA
+        // ==========================================
+
+        const musicaLobby =
+            document.getElementById(
+                "musica-lobby"
+            );
+
+        const musicaJogo =
+            document.getElementById(
+                "musica-jogo"
+            );
+
+        const botaoMusica =
+            document.getElementById(
+                "botao-musica"
+            );
+
+        let musicaLigada = true;
+
+        musicaLobby.volume = 0.35;
+        musicaJogo.volume = 0.35;
+
+
+        function atualizarBotaoMusica() {
+
+            if (!botaoMusica) {
+                return;
+            }
+
+            botaoMusica.innerHTML =
+                `<img src="${ICONES.music}" class="icone" alt="">` +
+                (musicaLigada ? "música" : "música desligada");
+
+        }
+
+
+        function tocarLobby() {
+
+            if (!musicaLigada) {
+                return;
+            }
+
+            musicaJogo.pause();
+            musicaJogo.currentTime = 0;
+
+            musicaLobby.play().catch(() => {
+
+                console.log(
+                    "aguardando interação do usuário"
+                );
+
+            });
+
+        }
+
+
+        function tocarJogo() {
+
+            if (!musicaLigada) {
+                return;
+            }
+
+            musicaLobby.pause();
+            musicaLobby.currentTime = 0;
+
+            musicaJogo.play().catch(() => {
+
+                console.log(
+                    "aguardando interação do usuário"
+                );
+
+            });
+
+        }
+
+
+        function pararMusicas() {
+
+            musicaLobby.pause();
+            musicaJogo.pause();
+
+        }
+
+
+        botaoMusica.addEventListener(
+            "click",
+            function() {
+
+                musicaLigada =
+                    !musicaLigada;
+
+
+                if (musicaLigada) {
+
+                    atualizarBotaoMusica();
+
+
+                    if (
+                        musicaJogo.currentTime > 0 &&
+                        !musicaJogo.paused
+                    ) {
+
+                        musicaJogo.play().catch(
+                            () => {}
+                        );
+
+                    } else {
+
+                        tocarLobby();
+
+                    }
+
+                } else {
+
+                    pararMusicas();
+
+                    atualizarBotaoMusica();
+
+                }
+
+            }
+        );
+
+
+        atualizarBotaoMusica();
+
+
+        document.addEventListener(
+            "click",
+            function iniciarMusica() {
+
+                if (musicaLigada) {
+
+                    if (
+                        musicaJogo.currentTime > 0 &&
+                        !musicaJogo.paused
+                    ) {
+
+                        musicaJogo.play().catch(
+                            () => {}
+                        );
+
+                    } else {
+
+                        tocarLobby();
+
+                    }
+
+                }
+
+                document.removeEventListener(
+                    "click",
+                    iniciarMusica
+                );
+
+            },
+            { once: true }
+        );
+
+
+        // ==========================================
+        // SOCKET
+        // ==========================================
+
+        const socket = io();
+
+
+        const campoCarro =
+            document.getElementById(
+                "campo-carro"
+            );
+
+        const botaoCarro =
+            document.getElementById(
+                "botao-carro"
+            );
+
+        const campoChat =
+            document.getElementById(
+                "campo-chat"
+            );
+
+        const botaoChat =
+            document.getElementById(
+                "botao-chat"
+            );
+
+        const statusConexao =
+            document.getElementById(
+                "status-conexao"
+            );
+
+        const botaoComecar =
+            document.getElementById(
+                "botao-comecar"
+            );
+
+        const botaoReiniciarSala =
+            document.getElementById(
+                "botao-reiniciar-sala"
+            );
+
+        const votacaoReinicio =
+            document.getElementById(
+                "votacao-reinicio"
+            );
+
+        const botaoVotarReinicio =
+            document.getElementById(
+                "btn-votar-reinicio"
+            );
+
+        const soloReinicio =
+            document.getElementById(
+                "solo-reinicio"
+            );
+
+        const botaoJogarNovamente =
+            document.getElementById(
+                "btn-jogar-novamente"
+            );
+
+        const botaoVoltarInicio =
+            document.getElementById(
+                "btn-voltar-inicio"
+            );
+
+        const votacaoStatus =
+            document.getElementById(
+                "votacao-status"
+            );
+
+        const botaoSairSala =
+            document.getElementById(
+                "botao-sair-sala"
+            );
+
+        const modalSairSala =
+            document.getElementById(
+                "modal-sair-sala"
+            );
+
+        const opcoesNovoHost =
+            document.getElementById(
+                "opcoes-novo-host"
+            );
+
+        const btnCancelarSair =
+            document.getElementById(
+                "btn-cancelar-sair"
+            );
+
+        const avisoInicio =
+            document.getElementById(
+                "aviso-inicio"
+            );
+
+        const intervalo =
+            document.getElementById(
+                "intervalo"
+            );
+
+        const intervaloSubtitulo =
+            document.getElementById(
+                "intervalo-subtitulo"
+            );
+
+        const tempoIntervalo =
+            document.getElementById(
+                "tempo-intervalo"
+            );
+
+        const intervaloInfo =
+            document.getElementById(
+                "intervalo-info"
+            );
+
+        const btnPularIntervalo =
+            document.getElementById(
+                "btn-pular-intervalo"
+            );
+
+
+        // ==========================================
+        // CONTROLE LOCAL
+        // ==========================================
+
+        let jaRespondi = false;
+
+        let jogoIniciadoLocal =
+            document.body.dataset.jogoIniciado === "true";
+
+        let emIntervalo =
+            document.body.dataset.emIntervalo === "true";
+
+        let quantidadeJogadoresAtual =
+            document.querySelectorAll(
+                "#lista-jogadores > li"
+            ).length;
+
+        let jogadoresAtuais = [];
+
+        let processandoSaida = false;
+
+
+        // ==========================================
+        // SOM DE NOTIFICAÇÃO
+        // ==========================================
+
+        let audioContext = null;
+
+
+        function prepararAudioNotificacao() {
+
+            if (!audioContext) {
+
+                const AudioContext =
+                    window.AudioContext ||
+                    window.webkitAudioContext;
+
+                if (!AudioContext) {
+                    return;
+                }
+
+                audioContext =
+                    new AudioContext();
+
+            }
+
+            if (
+                audioContext.state ===
+                "suspended"
+            ) {
+
+                audioContext.resume().catch(
+                    () => {}
+                );
+
+            }
+
+        }
+
+
+        document.addEventListener(
+            "click",
+            prepararAudioNotificacao,
+            {
+                once: true
+            }
+        );
+
+
+        function tocarSomChat() {
+
+            try {
+
+                prepararAudioNotificacao();
+
+                if (!audioContext) {
+                    return;
+                }
+
+                const agora =
+                    audioContext.currentTime;
+
+                const oscilador =
+                    audioContext.createOscillator();
+
+                const ganho =
+                    audioContext.createGain();
+
+
+                oscilador.type =
+                    "sine";
+
+                oscilador.frequency.setValueAtTime(
+                    880,
+                    agora
+                );
+
+                oscilador.frequency.setValueAtTime(
+                    1174,
+                    agora + 0.08
+                );
+
+
+                ganho.gain.setValueAtTime(
+                    0.0001,
+                    agora
+                );
+
+                ganho.gain.exponentialRampToValueAtTime(
+                    0.10,
+                    agora + 0.015
+                );
+
+                ganho.gain.exponentialRampToValueAtTime(
+                    0.0001,
+                    agora + 0.20
+                );
+
+
+                oscilador.connect(
+                    ganho
+                );
+
+                ganho.connect(
+                    audioContext.destination
+                );
+
+
+                oscilador.start(
+                    agora
+                );
+
+                oscilador.stop(
+                    agora + 0.21
+                );
+
+            } catch (erro) {
+
+                console.log(
+                    "não foi possível tocar o som:",
+                    erro
+                );
+
+            }
+
+        }
+
+
+        // ==========================================
+        // NOTIFICAÇÃO CHAT
+        // ==========================================
+
+        const notificacaoChat =
+            document.getElementById(
+                "notificacao-chat"
+            );
+
+        const notificacaoMensagem =
+            document.getElementById(
+                "notificacao-mensagem"
+            );
+
+
+        let timeoutNotificacao = null;
+
+
+        function chatEstaAberto() {
+
+            const chatAba =
+                document.getElementById(
+                    "chat-aba"
+                );
+
+            return (
+                chatAba &&
+                chatAba.classList.contains(
+                    "ativa"
+                )
+            );
+
+        }
+
+
+        function mostrarNotificacaoChat(
+            nome,
+            mensagem
+        ) {
+
+            if (modoSolo) {
+                return;
+            }
+
+            if (chatEstaAberto()) {
+                return;
+            }
+
+
+            notificacaoMensagem.textContent =
+                nome + ": " + mensagem;
+
+            notificacaoChat.classList.add(
+                "ativa"
+            );
+
+
+            tocarSomChat();
+
+
+            if (timeoutNotificacao) {
+
+                clearTimeout(
+                    timeoutNotificacao
+                );
+
+            }
+
+
+            timeoutNotificacao =
+                setTimeout(
+                    () => {
+
+                        esconderNotificacaoChat();
+
+                    },
+                    5000
+                );
+
+        }
+
+
+        function esconderNotificacaoChat() {
+
+            notificacaoChat.classList.remove(
+                "ativa"
+            );
+
+        }
+
+
+        function abrirChatNotificacao() {
+
+            esconderNotificacaoChat();
+
+            abrirAba("chat");
+
+            campoChat.focus();
+
+        }
+
+
+        // ==========================================
+        // ESCONDER CHAT NO SOLO
+        // ==========================================
+
+        function configurarModoSolo() {
+
+            if (!modoSolo) {
+                return;
+            }
+
+            const btnChat =
+                document.getElementById(
+                    "btn-chat"
+                );
+
+            const chatAba =
+                document.getElementById(
+                    "chat-aba"
+                );
+
+            if (btnChat) {
+                btnChat.style.display = "none";
+            }
+
+            if (chatAba) {
+                chatAba.style.display = "none";
+            }
+
+        }
+
+        configurarModoSolo();
+
+
+        // ==========================================
+        // ESTADO DO CHAT
+        // ==========================================
+
+        function atualizarChatEstado() {
+
+            if (modoSolo) {
+                return;
+            }
+
+            const bloqueado =
+                jogoIniciadoLocal &&
+                !emIntervalo;
+
+            campoChat.disabled =
+                bloqueado;
+
+            botaoChat.disabled =
+                bloqueado;
+
+
+            if (bloqueado) {
+
+                campoChat.placeholder =
+                    "chat bloqueado durante a rodada...";
+
+            } else {
+
+                campoChat.placeholder =
+                    "escreva uma mensagem...";
+
+            }
+
+        }
+
+
+        // ==========================================
+        // BOTÃO COMEÇAR
+        // ==========================================
+
+        function atualizarBotaoComecar(
+            quantidade
+        ) {
+
+            if (
+                !botaoComecar ||
+                !souHost ||
+                jogoIniciadoLocal
+            ) {
+                return;
+            }
+
+
+            quantidadeJogadoresAtual =
+                quantidade;
+
+
+            const salaCheia =
+                maxJogadoresSala > 0 &&
+                quantidade >= maxJogadoresSala;
+
+
+            botaoComecar.disabled =
+                !salaCheia;
+
+
+            if (salaCheia) {
+
+                botaoComecar.innerHTML = `
+                    <img
+                        src="${ICONES.crown}"
+                        class="icone"
+                        alt=""
+                    >
+                    começar jogo
+                `;
+
+
+                if (avisoInicio) {
+
+                    avisoInicio.textContent =
+                        "todos os jogadores entraram. o jogo pode começar!";
+
+                    avisoInicio.style.display =
+                        "none";
+
+                }
+
+            } else {
+
+                botaoComecar.innerHTML = `
+                    <img
+                        src="${ICONES.crown}"
+                        class="icone"
+                        alt=""
+                    >
+                    aguarde jogadores
+                `;
+
+
+                if (avisoInicio) {
+
+                    avisoInicio.textContent =
+                        `aguardando jogadores... ${quantidade}/${maxJogadoresSala}`;
+
+                    avisoInicio.style.display =
+                        "block";
+
+                }
+
+            }
+
+        }
+
+
+        // ==========================================
+        // ABAS
+        // ==========================================
+
+        function abrirAba(aba) {
+
+            if (
+                aba === "chat" &&
+                modoSolo
+            ) {
+                return;
+            }
+
+
+            document
+                .querySelectorAll(".aba")
+                .forEach(
+                    x =>
+                        x.classList.remove(
+                            "ativa"
+                        )
+                );
+
+
+            document
+                .querySelectorAll(
+                    ".menu button[data-aba]"
+                )
+                .forEach(
+                    x =>
+                        x.classList.remove(
+                            "ativo"
+                        )
+                );
+
+
+            if (aba === "jogo") {
+
+                document
+                    .getElementById("jogo")
+                    .classList.add("ativa");
+
+
+                document
+                    .getElementById("btn-jogo")
+                    .classList.add("ativo");
+
+            } else {
+
+                const chatAba =
+                    document.getElementById(
+                        "chat-aba"
+                    );
+
+                const btnChat =
+                    document.getElementById(
+                        "btn-chat"
+                    );
+
+
+                if (
+                    !chatAba ||
+                    !btnChat
+                ) {
+                    return;
+                }
+
+
+                chatAba.classList.add(
+                    "ativa"
+                );
+
+                btnChat.classList.add(
+                    "ativo"
+                );
+
+
+                esconderNotificacaoChat();
+
+            }
+
+        }
+
+
+        // ==========================================
+        // CONEXÃO
+        // ==========================================
+
+        socket.on(
+            "connect",
+            () => {
+
+                statusConexao.innerHTML =
+                    `<img src="${ICONES.green}" class="icone" alt=""> conectado`;
+
+                statusConexao.style.color =
+                    "#6fda8b";
+
+
+                socket.emit(
+                    "entrar_sala",
+                    {
+                        codigo:
+                            codigoSala,
+
+                        nome:
+                            meuNome
+                    }
+                );
+
+            }
+        );
+
+
+        socket.on(
+            "disconnect",
+            () => {
+
+                statusConexao.innerHTML =
+                    `<img src="${ICONES.red}" class="icone" alt=""> desconectado`;
+
+                statusConexao.style.color =
+                    "#ff7777";
+
+            }
+        );
+
+
+        socket.on(
+            "connect_error",
+            () => {
+
+                statusConexao.innerHTML =
+                    `<img src="${ICONES.red}" class="icone" alt=""> erro na conexão`;
+
+                statusConexao.style.color =
+                    "#ff7777";
+
+            }
+        );
+
+
+        socket.on(
+            "erro_socket",
+            data => {
+
+                if (botaoJogarNovamente) {
+                    botaoJogarNovamente.disabled = false;
+                    botaoJogarNovamente.innerHTML =
+                        `<img src="${ICONES.rotation}" class="icone" alt=""> jogar novamente`;
+                }
+
+                if (botaoVoltarInicio) {
+                    botaoVoltarInicio.disabled = false;
+                }
+
+                mostrarAviso(
+                    "❌ " +
+                    data.mensagem
+                );
+
+
+                if (
+                    botaoReiniciarSala
+                ) {
+
+                    botaoReiniciarSala.disabled =
+                        false;
+
+                }
+
+
+                if (
+                    botaoSairSala
+                ) {
+
+                    botaoSairSala.disabled =
+                        false;
+
+                }
+
+                processandoSaida = false;
+                fecharModalSair();
+
+
+                if (
+                    botaoComecar &&
+                    !jogoIniciadoLocal
+                ) {
+
+                    botaoComecar.disabled =
+                        false;
+
+                    atualizarBotaoComecar(
+                        quantidadeJogadoresAtual
+                    );
+
+                }
+
+            }
+        );
+
+
+        // ==========================================
+        // SALA PRONTA
+        // ==========================================
+
+        socket.on(
+            "sala_pronta",
+            data => {
+
+                atualizarJogadores(data);
+
+
+                jogoIniciadoLocal =
+                    !!data.jogo_iniciado;
+
+
+                emIntervalo =
+                    !!data.em_intervalo;
+
+
+                if (
+                    data.jogo_iniciado &&
+                    data.em_intervalo
+                ) {
+
+                    mostrarIntervalo(data);
+
+                } else if (
+                    data.jogo_iniciado &&
+                    data.letra
+                ) {
+
+                    iniciarInterfaceJogo(
+                        data
+                    );
+
+                }
+
+
+                atualizarChatEstado();
+
+            }
+        );
+
+
+        // ==========================================
+        // JOGADORES
+        // ==========================================
+
+        function atualizarJogadores(data) {
+
+            const lista =
+                document.getElementById(
+                    "lista-jogadores"
+                );
+
+
+            lista.innerHTML = "";
+
+
+            quantidadeJogadoresAtual =
+                data.jogadores.length;
+
+            jogadoresAtuais =
+                data.jogadores.slice();
+
+
+            data.jogadores.forEach(
+                jogador => {
+
+                    const li =
+                        document.createElement(
+                            "li"
+                        );
+
+
+                    if (
+                        jogador.eliminado
+                    ) {
+
+                        li.classList.add(
+                            "eliminado"
+                        );
+
+                    }
+
+
+                    const info =
+                        document.createElement(
+                            "div"
+                        );
+
+                    info.className =
+                        "jogador-info";
+
+
+                    const iconeStatus =
+                        document.createElement(
+                            "img"
+                        );
+
+                    iconeStatus.src =
+                        jogador.eliminado
+                        ? ICONES.skull
+                        : ICONES.green;
+
+                    iconeStatus.className =
+                        "icone";
+
+                    iconeStatus.alt =
+                        jogador.eliminado
+                        ? "eliminado"
+                        : "online";
+
+
+                    info.appendChild(
+                        iconeStatus
+                    );
+
+
+                    const nome =
+                        document.createElement(
+                            "span"
+                        );
+
+                    nome.className =
+                        "jogador-nome";
+
+                    nome.textContent =
+                        jogador.nome;
+
+
+                    info.appendChild(
+                        nome
+                    );
+
+
+                    if (
+                        jogador.host
+                    ) {
+
+                        const host =
+                            document.createElement(
+                                "span"
+                            );
+
+                        host.className =
+                            "host";
+
+                        host.textContent =
+                            "HOST";
+
+                        info.appendChild(
+                            host
+                        );
+
+                    }
+
+
+                    const acoes =
+                        document.createElement(
+                            "div"
+                        );
+
+                    acoes.className =
+                        "jogador-acoes";
+
+
+                    const pontosVidas =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    const pontos =
+                        document.createElement(
+                            "span"
+                        );
+
+                    pontos.className =
+                        "pontos-lobby";
+
+                    pontos.innerHTML = `
+                        <img
+                            src="${ICONES.star}"
+                            class="icone"
+                            alt=""
+                        >
+                        ${jogador.pontos || 0}
+                    `;
+
+
+                    const vidas =
+                        document.createElement(
+                            "span"
+                        );
+
+                    vidas.className =
+                        "vidas";
+
+                    vidas.innerHTML = `
+                        <img
+                            src="${ICONES.heart}"
+                            class="icone"
+                            alt=""
+                        >
+                        ${jogador.vidas}
+                    `;
+
+
+                    pontosVidas.appendChild(
+                        pontos
+                    );
+
+                    pontosVidas.appendChild(
+                        vidas
+                    );
+
+
+                    acoes.appendChild(
+                        pontosVidas
+                    );
+
+
+                    /*
+                     * BOTÃO EXPULSAR
+                     *
+                     * só aparece:
+                     * - para o host
+                     * - em outro jogador
+                     * - enquanto a partida não começou
+                     */
+
+                    const partidaComecou =
+                        data.jogo_iniciado === true;
+
+
+                    if (
+                        souHost &&
+                        jogador.nome !== meuNome &&
+                        !partidaComecou
+                    ) {
+
+                        const botaoExpulsar =
+                            document.createElement(
+                                "button"
+                            );
+
+                        botaoExpulsar.className =
+                            "btn-expulsar";
+
+                        botaoExpulsar.type =
+                            "button";
+
+                        botaoExpulsar.title =
+                            "expulsar jogador";
+
+                        botaoExpulsar.textContent =
+                            "✕";
+
+
+                        botaoExpulsar.addEventListener(
+                            "click",
+                            () => {
+
+                                if (
+                                    !socket.connected
+                                ) {
+
+                                    mostrarAviso(
+                                        "aguardando conexão..."
+                                    );
+
+                                    return;
+
+                                }
+
+
+                                const confirmar =
+                                    confirm(
+                                        `expulsar ${jogador.nome} da sala?`
+                                    );
+
+
+                                if (!confirmar) {
+                                    return;
+                                }
+
+
+                                botaoExpulsar.disabled =
+                                    true;
+
+
+                                socket.emit(
+                                    "expulsar_jogador",
+                                    {
+                                        nome:
+                                            jogador.nome
+                                    }
+                                );
+
+                            }
+                        );
+
+
+                        acoes.appendChild(
+                            botaoExpulsar
+                        );
+
+                    }
+
+
+                    li.appendChild(
+                        info
+                    );
+
+                    li.appendChild(
+                        acoes
+                    );
+
+
+                    lista.appendChild(
+                        li
+                    );
+
+
+                    if (
+                        jogador.nome ===
+                        meuNome
+                    ) {
+
+                        atualizarMinhasVidas(
+                            jogador.vidas
+                        );
+
+
+                        atualizarMeusPontos(
+                            jogador.pontos || 0
+                        );
+
+                    }
+
+                }
+            );
+
+
+            const configs =
+                document.querySelectorAll(
+                    ".config strong"
+                );
+
+
+            if (
+                configs[0] &&
+                data.tempo !== undefined
+            ) {
+
+                configs[0].textContent =
+                    data.tempo + "s";
+
+            }
+
+
+            if (
+                !jogoIniciadoLocal &&
+                !data.jogo_iniciado
+            ) {
+
+                atualizarBotaoComecar(
+                    data.jogadores.length
+                );
+
+            }
+
+        }
+
+
+        socket.on(
+            "atualizar_jogadores",
+            data => {
+
+                atualizarJogadores(data);
+
+
+                if (
+                    data.jogo_iniciado !== undefined
+                ) {
+
+                    jogoIniciadoLocal =
+                        !!data.jogo_iniciado;
+
+                }
+
+
+                if (
+                    data.em_intervalo !== undefined
+                ) {
+
+                    emIntervalo =
+                        !!data.em_intervalo;
+
+                }
+
+
+                atualizarChatEstado();
+
+            }
+        );
+
+
+        // ==========================================
+        // COMEÇAR
+        // ==========================================
+
+        if (botaoComecar) {
+
+            botaoComecar.addEventListener(
+                "click",
+                () => {
+
+                    if (
+                        !socket.connected
+                    ) {
+
+                        mostrarAviso(
+                            "aguardando conexão..."
+                        );
+
+                        return;
+
+                    }
+
+
+                    /*
+                     * SEGURANÇA EXTRA NO CLIENTE.
+                     *
+                     * o app.py também deve bloquear,
+                     * então mesmo se alguém tentar
+                     * pelo console do navegador,
+                     * o servidor continua protegendo.
+                     */
+
+                    if (
+                        quantidadeJogadoresAtual <
+                        maxJogadoresSala
+                    ) {
+
+                        mostrarAviso(
+                            `❌ a sala precisa estar cheia (${quantidadeJogadoresAtual}/${maxJogadoresSala})`
+                        );
+
+                        atualizarBotaoComecar(
+                            quantidadeJogadoresAtual
+                        );
+
+                        return;
+
+                    }
+
+
+                    botaoComecar.disabled =
+                        true;
+
+
+                    if (avisoInicio) {
+
+                        avisoInicio.style.display =
+                            "none";
+
+                    }
+
+
+                    socket.emit(
+                        "comecar_jogo"
+                    );
+
+                }
+            );
+
+        }
+
+
+        // ==========================================
+        // REINICIAR SALA
+        // ==========================================
+
+        if (botaoReiniciarSala) {
+
+            botaoReiniciarSala.addEventListener(
+                "click",
+                () => {
+
+                    if (!socket.connected) {
+
+                        mostrarAviso(
+                            "aguardando conexão..."
+                        );
+
+                        return;
+
+                    }
+
+                    const confirmar = confirm(
+                        "reiniciar a sala? todos os jogadores voltarão para 3 vidas e 0 pontos."
+                    );
+
+                    if (!confirmar) {
+                        return;
+                    }
+
+                    botaoReiniciarSala.disabled = true;
+
+                    socket.emit(
+                        "reiniciar_sala"
+                    );
+
+                }
+            );
+
+        }
+
+
+        socket.on(
+            "sala_reiniciada",
+            data => {
+
+                jogoIniciadoLocal = false;
+                emIntervalo = false;
+                jaRespondi = false;
+
+                fecharRanking();
+                esconderIntervalo();
+                esconderVotacaoReinicio();
+
+                atualizarJogadores(data);
+
+                document
+                    .getElementById("estado-partida")
+                    .textContent =
+                        "esperando o host iniciar...";
+
+                document
+                    .getElementById("letra")
+                    .textContent = "?";
+
+                document
+                    .getElementById("letra")
+                    .style.display = "none";
+
+                document
+                    .getElementById("rodada")
+                    .textContent =
+                        "0/" + data.total_rodadas;
+
+                document
+                    .getElementById("tempo")
+                    .textContent =
+                        formatarTempo(data.tempo || 0);
+
+                document
+                    .getElementById("tempo")
+                    .style.color = "white";
+
+                campoCarro.value = "";
+                campoCarro.disabled = true;
+                botaoCarro.disabled = true;
+                campoCarro.placeholder =
+                    "comece o jogo...";
+
+                document
+                    .getElementById("carros-enviados")
+                    .innerHTML = "";
+
+                if (botaoComecar && souHost) {
+
+                    botaoComecar.style.display = "inline-flex";
+                    botaoComecar.disabled = false;
+
+                    if (avisoInicio) {
+                        avisoInicio.style.display = "block";
+                    }
+
+                    atualizarBotaoComecar(
+                        data.jogadores.length
+                    );
+
+                }
+
+                if (botaoReiniciarSala) {
+                    botaoReiniciarSala.disabled = false;
+                }
+
+                atualizarChatEstado();
+                tocarLobby();
+                mostrarAviso(
+                    "sala reiniciada!"
+                );
+
+            }
+        );
+
+
+        // ==========================================
+        // SAIR DA SALA
+        // ==========================================
+
+        function fecharModalSair() {
+
+            if (modalSairSala) {
+
+                modalSairSala.classList.remove(
+                    "ativo"
+                );
+
+            }
+
+        }
+
+
+        function abrirModalNovoHost() {
+
+            if (!modalSairSala || !opcoesNovoHost) {
+                return;
+            }
+
+            const outrosJogadores =
+                jogadoresAtuais.filter(
+                    jogador => jogador.nome !== meuNome
+                );
+
+            if (!outrosJogadores.length) {
+
+                const confirmar = confirm(
+                    "você é o único jogador. ao sair, a sala será encerrada. continuar?"
+                );
+
+                if (confirmar) {
+                    processandoSaida = true;
+                    if (botaoSairSala) {
+                        botaoSairSala.disabled = true;
+                    }
+                    socket.emit("sair_sala");
+                }
+
+                return;
+            }
+
+            opcoesNovoHost.innerHTML = "";
+
+            outrosJogadores.forEach(
+                jogador => {
+
+                    const botao =
+                        document.createElement("button");
+
+                    botao.type = "button";
+                    botao.className = "opcao-host";
+                    botao.innerHTML =
+                        `<img src="${ICONES.crown}" class="icone" alt=""> ${jogador.nome}`;
+
+                    botao.addEventListener(
+                        "click",
+                        () => {
+
+                            const confirmar = confirm(
+                                `transformar ${jogador.nome} em host e sair da sala?`
+                            );
+
+                            if (!confirmar) {
+                                return;
+                            }
+
+                            processandoSaida = true;
+                            if (botaoSairSala) {
+                                botaoSairSala.disabled = true;
+                            }
+
+                            opcoesNovoHost
+                                .querySelectorAll("button")
+                                .forEach(
+                                    item => {
+                                        item.disabled = true;
+                                    }
+                                );
+
+                            socket.emit(
+                                "transferir_host_e_sair",
+                                {
+                                    nome: jogador.nome
+                                }
+                            );
+                        }
+                    );
+
+                    opcoesNovoHost.appendChild(
+                        botao
+                    );
+
+                }
+            );
+
+            modalSairSala.classList.add(
+                "ativo"
+            );
+        }
+
+
+        if (botaoSairSala) {
+
+            botaoSairSala.addEventListener(
+                "click",
+                () => {
+
+                    if (processandoSaida) {
+                        return;
+                    }
+
+                    if (!socket.connected) {
+                        mostrarAviso(
+                            "aguardando conexão..."
+                        );
+                        return;
+                    }
+
+                    if (souHost) {
+                        abrirModalNovoHost();
+                        return;
+                    }
+
+                    const confirmar = confirm(
+                        "sair da sala?"
+                    );
+
+                    if (!confirmar) {
+                        return;
+                    }
+
+                    processandoSaida = true;
+                    botaoSairSala.disabled = true;
+
+                    socket.emit(
+                        "sair_sala"
+                    );
+                }
+            );
+
+        }
+
+
+        if (btnCancelarSair) {
+
+            btnCancelarSair.addEventListener(
+                "click",
+                fecharModalSair
+            );
+
+        }
+
+
+        if (modalSairSala) {
+
+            modalSairSala.addEventListener(
+                "click",
+                event => {
+
+                    if (event.target === modalSairSala) {
+                        fecharModalSair();
+                    }
+
+                }
+            );
+
+        }
+
+
+        socket.on(
+            "voce_saiu_sala",
+            data => {
+
+                window.location.href = "/";
+
+            }
+        );
+
+
+        socket.on(
+            "host_transferido",
+            data => {
+
+                fecharModalSair();
+
+                if (
+                    meuNome === data.host_anterior
+                ) {
+
+                    window.location.href = "/";
+                    return;
+
+                }
+
+                window.location.reload();
+
+            }
+        );
+
+
+        socket.on(
+            "jogador_saiu",
+            data => {
+
+                if (data && data.nome) {
+                    mostrarAviso(
+                        `🚪 ${data.nome} saiu da sala.`
+                    );
+                }
+
+            }
+        );
+
+
+        // ==========================================
+        // JOGADOR EXPULSO
+        // ==========================================
+
+        socket.on(
+            "voce_foi_expulso",
+            data => {
+
+                alert(
+                    "🚪 você foi expulso da sala."
+                );
+
+
+                window.location.href =
+                    "/";
+
+            }
+        );
+
+
+        // ==========================================
+        // NOVA RODADA
+        // ==========================================
+
+        function iniciarInterfaceJogo(data) {
+
+            jogoIniciadoLocal =
+                true;
+
+            emIntervalo =
+                false;
+
+            jaRespondi =
+                false;
+
+
+            fecharRanking();
+            esconderIntervalo();
+
+
+            document
+                .getElementById("rodada")
+                .textContent =
+                    data.rodada +
+                    "/" +
+                    data.total_rodadas;
+
+
+            document
+                .getElementById("letra")
+                .textContent =
+                    data.letra;
+
+
+            document
+                .getElementById("letra")
+                .style.display =
+                    "block";
+
+
+            document
+                .getElementById(
+                    "estado-partida"
+                )
+                .textContent =
+                    "rodada em andamento";
+
+
+            if (botaoComecar) {
+
+                botaoComecar.style.display =
+                    "none";
+
+            }
+
+
+            if (avisoInicio) {
+
+                avisoInicio.style.display =
+                    "none";
+
+            }
+
+
+            campoCarro.disabled =
+                false;
+
+            botaoCarro.disabled =
+                false;
+
+
+            campoCarro.placeholder =
+                "digite um modelo...";
+
+
+            if (
+                data.tempo !== undefined
+            ) {
+
+                document
+                    .getElementById("tempo")
+                    .textContent =
+                        formatarTempo(
+                            data.tempo
+                        );
+
+            }
+
+
+            atualizarChatEstado();
+
+            tocarJogo();
+
+        }
+
+
+        socket.on(
+            "nova_rodada",
+            data => {
+
+                iniciarInterfaceJogo(
+                    data
+                );
+
+
+                document
+                    .getElementById(
+                        "carros-enviados"
+                    )
+                    .innerHTML = "";
+
+
+                campoCarro.focus();
+
+
+                mostrarAviso("");
+
+            }
+        );
+
+
+        // ==========================================
+        // INTERVALO
+        // ==========================================
+
+        function mostrarIntervalo(data) {
+
+            if (modoSolo) {
+
+                emIntervalo =
+                    false;
+
+                return;
+
+            }
+
+
+            jogoIniciadoLocal =
+                true;
+
+            emIntervalo =
+                true;
+
+            jaRespondi =
+                false;
+
+
+            fecharRanking();
+
+
+            campoCarro.disabled =
+                true;
+
+            botaoCarro.disabled =
+                true;
+
+
+            campoCarro.placeholder =
+                "aguarde a próxima rodada...";
+
+
+            intervalo.classList.add(
+                "ativo"
+            );
+
+
+            intervaloSubtitulo.textContent =
+                "próxima letra: rodada " +
+                data.proxima_rodada;
+
+
+            intervaloInfo.innerHTML =
+                `<img src="${ICONES.chat}" class="icone" alt=""> chat liberado durante o intervalo`;
+
+
+            if (
+                data.tempo !== undefined
+            ) {
+
+                tempoIntervalo.textContent =
+                    formatarTempo(
+                        data.tempo
+                    );
+
+
+                document
+                    .getElementById("tempo")
+                    .textContent =
+                        formatarTempo(
+                            data.tempo
+                        );
+
+            }
+
+
+            if (
+                souHost &&
+                !modoSolo
+            ) {
+
+                btnPularIntervalo.style.display =
+                    "inline-block";
+
+
+                btnPularIntervalo.disabled =
+                    false;
+
+            } else {
+
+                btnPularIntervalo.style.display =
+                    "none";
+
+            }
+
+
+            document
+                .getElementById(
+                    "estado-partida"
+                )
+                .textContent =
+                    "intervalo entre rodadas";
+
+
+            atualizarChatEstado();
+
+        }
+
+
+        function esconderIntervalo() {
+
+            intervalo.classList.remove(
+                "ativo"
+            );
+
+
+            btnPularIntervalo.style.display =
+                "none";
+
+        }
+
+
+        socket.on(
+            "intervalo_iniciado",
+            data => {
+
+                mostrarIntervalo(data);
+
+            }
+        );
+
+
+        socket.on(
+            "tempo_intervalo_atualizado",
+            data => {
+
+                if (!emIntervalo) {
+                    return;
+                }
+
+
+                const restante =
+                    data.restante;
+
+
+                tempoIntervalo.textContent =
+                    formatarTempo(
+                        restante
+                    );
+
+
+                document
+                    .getElementById("tempo")
+                    .textContent =
+                        formatarTempo(
+                            restante
+                        );
+
+            }
+        );
+
+
+        // ==========================================
+        // PULAR INTERVALO
+        // ==========================================
+
+        if (btnPularIntervalo) {
+
+            btnPularIntervalo.addEventListener(
+                "click",
+                () => {
+
+                    if (
+                        !souHost ||
+                        modoSolo ||
+                        !emIntervalo ||
+                        !socket.connected
+                    ) {
+                        return;
+                    }
+
+
+                    btnPularIntervalo.disabled =
+                        true;
+
+
+                    socket.emit(
+                        "pular_intervalo"
+                    );
+
+                }
+            );
+
+        }
+
+
+        // ==========================================
+        // TIMER
+        // ==========================================
+
+        socket.on(
+            "tempo_atualizado",
+            data => {
+
+                if (emIntervalo) {
+                    return;
+                }
+
+
+                document
+                    .getElementById("tempo")
+                    .textContent =
+                        formatarTempo(
+                            data.restante
+                        );
+
+
+                document
+                    .getElementById("tempo")
+                    .style.color =
+                        data.restante <= 10
+                        ? "#ff7777"
+                        : "white";
+
+            }
+        );
+
+
+        function formatarTempo(s) {
+
+            s =
+                Math.max(
+                    0,
+                    Math.floor(s)
+                );
+
+
+            return (
+
+                String(
+                    Math.floor(s / 60)
+                ).padStart(
+                    2,
+                    "0"
+                )
+
+                +
+
+                ":"
+
+                +
+
+                String(
+                    s % 60
+                ).padStart(
+                    2,
+                    "0"
+                )
+
+            );
+
+        }
+
+
+        // ==========================================
+        // ENVIAR CARRO
+        // ==========================================
+
+        function enviarCarro() {
+
+            const carro =
+                campoCarro.value.trim();
+
+
+            if (
+                !carro ||
+                !socket.connected ||
+                jaRespondi ||
+                emIntervalo
+            ) {
+                return;
+            }
+
+
+            socket.emit(
+                "enviar_carro",
+                {
+                    carro:
+                        carro
+                }
+            );
+
+
+            campoCarro.value = "";
+
+        }
+
+
+        botaoCarro.addEventListener(
+            "click",
+            enviarCarro
+        );
+
+
+        campoCarro.addEventListener(
+            "keydown",
+            e => {
+
+                if (
+                    e.key === "Enter"
+                ) {
+
+                    enviarCarro();
+
+                }
+
+            }
+        );
+
+
+        // ==========================================
+        // CARRO ACEITO
+        // ==========================================
+
+        socket.on(
+            "carro_aceito",
+            data => {
+
+                adicionarCarro(
+                    data.nome,
+                    data.carro
+                );
+
+
+                if (
+                    data.nome ===
+                    meuNome
+                ) {
+
+                    jaRespondi =
+                        true;
+
+
+                    campoCarro.disabled =
+                        true;
+
+
+                    botaoCarro.disabled =
+                        true;
+
+
+                    campoCarro.placeholder =
+                        "resposta enviada ✓";
+
+
+                    atualizarMinhasVidas(
+                        data.vidas
+                    );
+
+
+                    atualizarMeusPontos(
+                        data.pontos
+                    );
+
+                }
+
+            }
+        );
+
+
+        // ==========================================
+        // RESPOSTA ERRADA
+        // ==========================================
+
+        socket.on(
+            "resposta_carro",
+            data => {
+
+                mostrarAviso(
+                    "❌ " +
+                    data.mensagem
+                );
+
+
+                if (
+                    data.nome === meuNome &&
+                    data.vidas !== undefined
+                ) {
+
+                    atualizarMinhasVidas(
+                        data.vidas
+                    );
+
+                }
+
+            }
+        );
+
+
+        // ==========================================
+        // ADICIONAR CARRO
+        // ==========================================
+
+        function adicionarCarro(
+            nome,
+            carro
+        ) {
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+
+            item.className =
+                "carro-item";
+
+
+            item.innerHTML = `
+
+                <span>
+
+                    <img
+                        src="${ICONES.car}"
+                        class="icone"
+                        alt=""
+                    >
+
+                    ${escapeHtml(carro)}
+
+                </span>
+
+
+                <span class="carro-jogador">
+
+                    ${escapeHtml(nome)}
+
+                </span>
+
+            `;
+
+
+            const lista =
+                document.getElementById(
+                    "carros-enviados"
+                );
+
+
+            lista.appendChild(item);
+
+
+            lista.scrollTop =
+                lista.scrollHeight;
+
+        }
+
+
+        // ==========================================
+        // VIDAS
+        // ==========================================
+
+        function atualizarMinhasVidas(
+            vidas
+        ) {
+
+            document
+                .getElementById(
+                    "minhas-vidas"
+                )
+                .textContent =
+                    vidas;
+
+
+            if (
+                vidas <= 0
+            ) {
+
+                campoCarro.disabled =
+                    true;
+
+
+                botaoCarro.disabled =
+                    true;
+
+
+                campoCarro.placeholder =
+                    "você foi eliminado";
+
+            }
+
+        }
+
+
+        // ==========================================
+        // PONTOS
+        // ==========================================
+
+        function atualizarMeusPontos(
+            pontos
+        ) {
+
+            document
+                .getElementById(
+                    "meus-pontos"
+                )
+                .textContent =
+                    pontos;
+
+        }
+
+
+        // ==========================================
+        // VOTAÇÃO PARA REINICIAR
+        // ==========================================
+
+        function atualizarVotacaoReinicio(data) {
+
+            if (modoSolo || !votacaoReinicio) {
+                return;
+            }
+
+            const votos = Number(data.votos || 0);
+            const total = Number(data.total || 0);
+            const votantes = Array.isArray(data.votantes)
+                ? data.votantes
+                : [];
+
+            votacaoReinicio.classList.add(
+                "ativa"
+            );
+
+            if (votacaoStatus) {
+                votacaoStatus.textContent =
+                    `${votos}/${total} jogadores votaram para reiniciar`;
+            }
+
+            const jaVotei =
+                votantes.includes(meuNome);
+
+            if (botaoVotarReinicio) {
+
+                botaoVotarReinicio.disabled =
+                    jaVotei || votos >= total;
+
+                botaoVotarReinicio.innerHTML =
+                    jaVotei
+                        ? "✅ voto registrado"
+                        : `<img src="${ICONES.rotation}" class="icone" alt=""> votar para reiniciar`;
+
+            }
+
+        }
+
+
+        function esconderVotacaoReinicio() {
+
+            if (votacaoReinicio) {
+                votacaoReinicio.classList.remove(
+                    "ativa"
+                );
+            }
+
+            if (botaoVotarReinicio) {
+                botaoVotarReinicio.disabled = false;
+                botaoVotarReinicio.innerHTML =
+                    `<img src="${ICONES.rotation}" class="icone" alt=""> votar para reiniciar`;
+            }
+
+            if (votacaoStatus) {
+                votacaoStatus.textContent =
+                    "0/0 jogadores votaram";
+            }
+
+        }
+
+
+        if (botaoVotarReinicio) {
+
+            botaoVotarReinicio.addEventListener(
+                "click",
+                () => {
+
+                    if (!socket.connected) {
+                        mostrarAviso(
+                            "aguardando conexão..."
+                        );
+                        return;
+                    }
+
+                    botaoVotarReinicio.disabled = true;
+
+                    socket.emit(
+                        "votar_reiniciar"
+                    );
+
+                }
+            );
+
+        }
+
+
+        // ==========================================
+        // RANKING
+        // ==========================================
+
+        function esconderReinicioSolo() {
+
+            if (soloReinicio) {
+
+                soloReinicio.style.display =
+                    "none";
+
+            }
+
+        }
+
+
+        function mostrarReinicioSolo() {
+
+            if (soloReinicio) {
+
+                soloReinicio.style.display =
+                    "block";
+
+            }
+
+        }
+
+
+        function abrirRanking(
+            ranking,
+            rodada,
+            final = false
+        ) {
+
+            esconderReinicioSolo();
+
+            if (!ranking) {
+                return;
+            }
+
+
+            const overlay =
+                document.getElementById(
+                    "ranking-overlay"
+                );
+
+
+            const titulo =
+                document.getElementById(
+                    "ranking-titulo"
+                );
+
+
+            const subtitulo =
+                document.getElementById(
+                    "ranking-subtitulo"
+                );
+
+
+            const lista =
+                document.getElementById(
+                    "ranking-lista"
+                );
+
+
+            const botao =
+                document.getElementById(
+                    "btn-fechar-ranking"
+                );
+
+
+            lista.innerHTML = "";
+
+
+            if (final) {
+
+                titulo.innerHTML =
+                    `<img src="${ICONES.trophy}" class="icone-titulo" alt=""> ranking final`;
+
+
+                subtitulo.textContent =
+                    "fim da partida";
+
+
+                botao.textContent =
+                    "fechar";
+
+            } else {
+
+                titulo.innerHTML =
+                    `<img src="${ICONES.trophy}" class="icone-titulo" alt=""> ranking da rodada`;
+
+
+                subtitulo.textContent =
+                    "resultado da rodada " +
+                    rodada;
+
+
+                botao.textContent =
+                    "aguardar próxima rodada";
+
+            }
+
+
+            ranking.forEach(
+                jogador => {
+
+                    const item =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    item.className =
+                        "ranking-item";
+
+
+                    if (
+                        jogador.posicao === 1
+                    ) {
+
+                        item.classList.add(
+                            "primeiro"
+                        );
+
+                    }
+
+
+                    let medalha = "";
+
+
+                    if (
+                        jogador.posicao === 1
+                    ) {
+
+                        medalha =
+                            "🥇";
+
+                    } else if (
+                        jogador.posicao === 2
+                    ) {
+
+                        medalha =
+                            "🥈";
+
+                    } else if (
+                        jogador.posicao === 3
+                    ) {
+
+                        medalha =
+                            "🥉";
+
+                    } else {
+
+                        medalha =
+                            jogador.posicao +
+                            "º";
+
+                    }
+
+
+                    item.innerHTML = `
+
+                        <div class="ranking-posicao">
+                            ${medalha}
+                        </div>
+
+
+                        <div>
+
+                            <div class="ranking-nome">
+
+                                ${escapeHtml(
+                                    jogador.nome
+                                )}
+
+                                ${
+                                    jogador.eliminado
+
+                                    ?
+
+                                    ` <img src="${ICONES.skull}" class="icone-pequeno" alt="eliminado">`
+
+                                    :
+
+                                    ""
+                                }
+
+                            </div>
+
+
+                            <div class="ranking-detalhes">
+
+                                <img
+                                    src="${ICONES.heart}"
+                                    class="icone"
+                                    alt=""
+                                >
+
+                                ${jogador.vidas}
+
+                                &nbsp; • &nbsp;
+
+                                ${jogador.pontos}
+                                ponto(s)
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="ranking-pontos">
+
+                            <img
+                                src="${ICONES.star}"
+                                class="icone"
+                                alt=""
+                            >
+
+                            ${jogador.pontos}
+
+                        </div>
+
+                    `;
+
+
+                    lista.appendChild(item);
+
+                }
+            );
+
+
+            overlay.classList.add(
+                "ativo"
+            );
+
+        }
+
+
+        function fecharRanking() {
+
+            document
+                .getElementById(
+                    "ranking-overlay"
+                )
+                .classList.remove(
+                    "ativo"
+                );
+
+        }
+
+
+        // ==========================================
+        // FIM DA RODADA
+        // ==========================================
+
+        socket.on(
+            "rodada_terminou",
+            data => {
+
+                campoCarro.disabled =
+                    true;
+
+
+                botaoCarro.disabled =
+                    true;
+
+
+                campoCarro.placeholder =
+                    "próxima rodada...";
+
+
+                abrirRanking(
+                    data.ranking,
+                    data.rodada,
+                    false
+                );
+
+            }
+        );
+
+
+        // ==========================================
+        // ELIMINAÇÃO NO SOLO
+        // ==========================================
+
+        socket.on(
+            "solo_eliminado",
+            data => {
+
+                jogoIniciadoLocal =
+                    false;
+
+                emIntervalo =
+                    false;
+
+                esconderIntervalo();
+
+                campoCarro.disabled =
+                    true;
+
+                botaoCarro.disabled =
+                    true;
+
+                campoCarro.placeholder =
+                    "você foi eliminado";
+
+                document
+                    .getElementById(
+                        "estado-partida"
+                    )
+                    .innerHTML =
+                        `<img src="${ICONES.skull}" class="icone" alt=""> você foi eliminado`;
+
+                atualizarChatEstado();
+
+                abrirRanking(
+                    data.ranking,
+                    0,
+                    true
+                );
+
+                mostrarReinicioSolo();
+
+            }
+        );
+
+
+        if (botaoJogarNovamente) {
+
+            botaoJogarNovamente.addEventListener(
+                "click",
+                () => {
+
+                    if (!socket.connected) {
+                        mostrarAviso(
+                            "aguardando conexão..."
+                        );
+                        return;
+                    }
+
+                    botaoJogarNovamente.disabled =
+                        true;
+
+                    botaoVoltarInicio.disabled =
+                        true;
+
+                    botaoJogarNovamente.innerHTML =
+                        `<img src="${ICONES.rotation}" class="icone" alt=""> iniciando...`;
+
+                    socket.emit(
+                        "comecar_jogo"
+                    );
+
+                }
+            );
+
+        }
+
+
+        if (botaoVoltarInicio) {
+
+            botaoVoltarInicio.addEventListener(
+                "click",
+                () => {
+
+                    window.location.href =
+                        "/";
+
+                }
+            );
+
+        }
+
+
+        // ==========================================
+        // FIM DO JOGO
+        // ==========================================
+
+        socket.on(
+            "jogo_terminou",
+            data => {
+
+                esconderReinicioSolo();
+
+                jogoIniciadoLocal =
+                    false;
+
+
+                emIntervalo =
+                    false;
+
+
+                esconderIntervalo();
+
+
+                campoCarro.disabled =
+                    true;
+
+
+                botaoCarro.disabled =
+                    true;
+
+
+                document
+                    .getElementById(
+                        "estado-partida"
+                    )
+                    .textContent =
+                        "🏁 partida encerrada";
+
+
+                if (botaoComecar) {
+
+                    botaoComecar.style.display =
+                        "none";
+
+                }
+
+
+                atualizarChatEstado();
+
+
+                abrirRanking(
+                    data.ranking,
+                    data.rodada,
+                    true
+                );
+
+                if (data.aguardando_reinicio) {
+
+                    atualizarVotacaoReinicio({
+                        votos: data.votos_reiniciar || 0,
+                        total: data.total_votos_reiniciar || 0,
+                        votantes: []
+                    });
+
+                } else {
+
+                    esconderVotacaoReinicio();
+
+                }
+
+            }
+        );
+
+
+        // ==========================================
+        // VOTAÇÃO PARA REINICIAR
+        // ==========================================
+
+        socket.on(
+            "votacao_reinicio",
+            data => {
+                atualizarVotacaoReinicio(data);
+            }
+        );
+
+
+        socket.on(
+            "reinicio_aprovado",
+            data => {
+
+                if (votacaoStatus) {
+                    votacaoStatus.textContent =
+                        "✅ todos votaram! Reiniciando a partida...";
+                }
+
+                if (botaoVotarReinicio) {
+                    botaoVotarReinicio.disabled = true;
+                    botaoVotarReinicio.innerHTML =
+                        `<img src="${ICONES.rotation}" class="icone" alt=""> reiniciando...`;
+                }
+
+            }
+        );
+
+
+        // ==========================================
+        // CHAT
+        // ==========================================
+
+        function enviarMensagem() {
+
+            if (
+                modoSolo ||
+                campoChat.disabled
+            ) {
+                return;
+            }
+
+
+            const mensagem =
+                campoChat.value.trim();
+
+
+            if (
+                !mensagem ||
+                !socket.connected
+            ) {
+                return;
+            }
+
+
+            socket.emit(
+                "mensagem_chat",
+                {
+                    mensagem:
+                        mensagem
+                }
+            );
+
+
+            campoChat.value = "";
+
+            campoChat.focus();
+
+        }
+
+
+        if (botaoChat) {
+
+            botaoChat.addEventListener(
+                "click",
+                enviarMensagem
+            );
+
+        }
+
+
+        if (campoChat) {
+
+            campoChat.addEventListener(
+                "keydown",
+                e => {
+
+                    if (
+                        e.key === "Enter"
+                    ) {
+
+                        enviarMensagem();
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        // ==========================================
+        // MENSAGEM
+        // ==========================================
+
+        socket.on(
+            "mensagem_chat",
+            data => {
+
+                if (modoSolo) {
+                    return;
+                }
+
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                div.className =
+                    "chat-msg";
+
+
+                div.innerHTML = `
+
+                    <span class="chat-nome">
+
+                        ${escapeHtml(data.nome)}:
+
+                    </span>
+
+                    ${escapeHtml(data.mensagem)}
+
+                `;
+
+
+                document
+                    .getElementById(
+                        "chat"
+                    )
+                    .appendChild(div);
+
+
+                const chat =
+                    document.getElementById(
+                        "chat"
+                    );
+
+
+                chat.scrollTop =
+                    chat.scrollHeight;
+
+
+                // 🔔 NOTIFICA APENAS MENSAGENS DE OUTRAS PESSOAS
+
+                if (
+                    data.nome !== meuNome
+                ) {
+
+                    mostrarNotificacaoChat(
+                        data.nome,
+                        data.mensagem
+                    );
+
+                }
+
+            }
+        );
+
+
+        // ==========================================
+        // CHAT BLOQUEADO
+        // ==========================================
+
+        socket.on(
+            "chat_bloqueado",
+            data => {
+
+                if (modoSolo) {
+                    return;
+                }
+
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                div.className =
+                    "chat-msg chat-bloqueado";
+
+
+                div.textContent =
+                    "🚫 " +
+                    data.mensagem;
+
+
+                document
+                    .getElementById(
+                        "chat"
+                    )
+                    .appendChild(div);
+
+            }
+        );
+
+
+        // ==========================================
+        // AVISO
+        // ==========================================
+
+        function mostrarAviso(
+            texto
+        ) {
+
+            const aviso =
+                document.getElementById(
+                    "aviso"
+                );
+
+
+            aviso.textContent =
+                texto;
+
+
+            aviso.style.display =
+                texto
+                ? "block"
+                : "none";
+
+
+            if (texto) {
+
+                setTimeout(
+                    () => {
+
+                        aviso.style.display =
+                            "none";
+
+                    },
+                    3500
+                );
+
+            }
+
+        }
+
+
+        // ==========================================
+        // SEGURANÇA HTML
+        // ==========================================
+
+        function escapeHtml(
+            text
+        ) {
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+
+            div.textContent =
+                String(text);
+
+
+            return div.innerHTML;
+
+        }
+
+
+        // ==========================================
+        // ESTADO INICIAL
+        // ==========================================
+
+        atualizarBotaoComecar(
+            quantidadeJogadoresAtual
+        );
+
+        atualizarChatEstado();
+
+    </script>
+
+</body>
+
+</html>
